@@ -16,6 +16,7 @@
 #include <utility>
 #include <tuple>
 #include <functional>
+#include <boost/numeric/ublas/tensor/layout.hpp>
 
 template<class ... types>
 struct zip_helper;
@@ -52,7 +53,7 @@ using zip = zip_helper<std::tuple<>,types...>;
 
 
 template<class UnaryOp, class ... Elements>
-void for_each_in_tuple(std::tuple<Elements...> const& tuple, UnaryOp&& op)
+constexpr void for_each_in_tuple(std::tuple<Elements...> const& tuple, UnaryOp&& op)
 {
   auto invoke_op_for_tuple = [&]<std::size_t... Is>(std::index_sequence<Is...>) {
     (..., std::invoke(op, Is, std::get<Is>(tuple)));
@@ -99,6 +100,11 @@ struct inner_type< std::complex<T> >{
 template<typename T>
 using inner_type_t = typename inner_type<T>::type;
 
+namespace boost::numeric::ublas{
+
+  using test_types = zip<int,float,std::complex<float>>::with_t<layout::first_order, layout::last_order>;
+
+} // namespace boost::numeric::ublas
 
 
 // creates e.g.
