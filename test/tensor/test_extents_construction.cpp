@@ -13,7 +13,7 @@
 #include <boost/test/unit_test.hpp>
 #include "fixture_utility.hpp"
 
-BOOST_AUTO_TEST_SUITE(test_constructor, * boost::unit_test::description("Validate constructor"))
+BOOST_AUTO_TEST_SUITE(test_extents_constructor, * boost::unit_test::description("Validate constructor"))
 
 
 BOOST_FIXTURE_TEST_CASE(test_extents_dynamic, 

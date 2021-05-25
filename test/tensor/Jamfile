@@ -32,11 +32,16 @@ explicit unit_test_framework ;
 test-suite boost-ublas-tensor-test
     :
     [ run test_main.cpp
-          test_empty_function.cpp
-          test_size_function.cpp
-          test_at_function.cpp
-          test_access_operator.cpp
-          test_construction.cpp
+          test_extents_empty.cpp
+          test_extents_size.cpp
+          test_extents_at.cpp
+          test_extents_access_operator.cpp
+          test_extents_construction.cpp
+          test_tensor_empty.cpp
+          test_tensor_size.cpp
+          test_tensor_at.cpp
+          test_tensor_access_operator.cpp
+          # test_tensor_construction.cpp
           # test_algorithms.cpp
           # test_einstein_notation.cpp
           # test_expression.cpp

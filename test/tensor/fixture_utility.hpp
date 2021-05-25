@@ -278,7 +278,7 @@ namespace boost::numeric::ublas{
         using t1111_type    = tensor_type<typename fixture_type::n1111_type>;
         using t4231_type    = tensor_type<typename fixture_type::n4231_type>;
 
-        t2_type const    t2{};
+        // t2_type const    t2{};
 
         t11_type const   t11{};
         t12_type const   t12{};
@@ -300,14 +300,14 @@ namespace boost::numeric::ublas{
 
 
         using tuple_type = std::tuple<
-            t2_type const&,     
+            // t2_type const&,     
             t11_type const&,    t12_type const&,    t21_type const&,    t22_type const&,    t32_type const&,
             t111_type const&,   t112_type const&,   t121_type const&,   t123_type const&,   t211_type const&,   t213_type const&,   t321_type const&,   t432_type const&, 
             t1111_type const&,  t4231_type const&
         >;
 
         tuple_type collection{
-            t2,     
+            // t2,     
             t11,    t12,    t21,    t22,    t32,
             t111,   t112,   t121,   t123,   t211,   t213,   t321,   t432, 
             t1111,  t4231
