@@ -13,7 +13,13 @@
 #include <boost/test/unit_test.hpp>
 #include "fixture_utility.hpp"
 
-BOOST_AUTO_TEST_SUITE(test_extents_constructor, * boost::unit_test::description("Validate constructor"))
+BOOST_AUTO_TEST_SUITE(test_extents_constructor, 
+    *boost::unit_test::description("Validate constructor")
+    *boost::unit_test::depends_on("test_extents_empty")
+    *boost::unit_test::depends_on("test_extents_size")
+    *boost::unit_test::depends_on("test_extents_at")
+    *boost::unit_test::depends_on("test_extents_access_operator")
+)
 
 
 BOOST_FIXTURE_TEST_CASE(test_extents_dynamic, 
