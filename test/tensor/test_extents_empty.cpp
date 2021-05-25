@@ -13,7 +13,7 @@
 #include <boost/test/unit_test.hpp>
 #include "fixture_utility.hpp"
 
-BOOST_AUTO_TEST_SUITE(test_empty_function, * boost::unit_test::description("Validate Empty Function and Trait"))
+BOOST_AUTO_TEST_SUITE(test_extents_empty, * boost::unit_test::description("Validate Empty Function and Trait"))
 
 
 BOOST_FIXTURE_TEST_CASE(test_extents_dynamic_function, 
