@@ -89,6 +89,10 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_dynamic_multi_dim,
                 v += value_type(1);
             }
         }
+        BOOST_CHECK_THROW((void)t.at(0,0,0), std::invalid_argument);
+        BOOST_CHECK_THROW((void)t.at(0,0,0,0), std::invalid_argument);
+        BOOST_CHECK_THROW((void)t(0,0,0), std::invalid_argument);
+        BOOST_CHECK_THROW((void)t(0,0,0,0), std::invalid_argument);
     };
 
     constexpr auto check3 = [](auto t){
@@ -104,6 +108,10 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_dynamic_multi_dim,
                 }
             }
         }
+        BOOST_CHECK_THROW((void)t.at(0,0), std::invalid_argument);
+        BOOST_CHECK_THROW((void)t.at(0,0,0,0), std::invalid_argument);
+        BOOST_CHECK_THROW((void)t(0,0), std::invalid_argument);
+        BOOST_CHECK_THROW((void)t(0,0,0,0), std::invalid_argument);
     };
 
     constexpr auto check4 = [](auto t){
@@ -121,6 +129,13 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_dynamic_multi_dim,
                 }
             }
         }
+        
+        BOOST_CHECK_THROW((void)t.at(0,0), std::invalid_argument);
+        BOOST_CHECK_THROW((void)t.at(0,0,0), std::invalid_argument);
+        BOOST_CHECK_THROW((void)t.at(0,0,0,0,0), std::invalid_argument);
+        BOOST_CHECK_THROW((void)t(0,0), std::invalid_argument);
+        BOOST_CHECK_THROW((void)t(0,0,0), std::invalid_argument);
+        BOOST_CHECK_THROW((void)t(0,0,0,0,0), std::invalid_argument);
     };
 
     auto const self = static_cast<fixture_type const&>(*this);
