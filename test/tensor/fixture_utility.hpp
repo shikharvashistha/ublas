@@ -127,26 +127,26 @@ namespace boost::numeric::ublas{
         using n1111_type    = extents_core<ExtentsType,1, 1, 1, 1>;
         using n4231_type    = extents_core<ExtentsType,4, 2, 3, 1>;
 
-        constexpr static n1_type    n1;
-        constexpr static n2_type    n2;
+        constexpr static n1_type    n1{};
+        constexpr static n2_type    n2{};
 
-        constexpr static n11_type   n11;
-        constexpr static n12_type   n12;
-        constexpr static n21_type   n21;
-        constexpr static n22_type   n22;
-        constexpr static n32_type   n32;
+        constexpr static n11_type   n11{};
+        constexpr static n12_type   n12{};
+        constexpr static n21_type   n21{};
+        constexpr static n22_type   n22{};
+        constexpr static n32_type   n32{};
 
-        constexpr static n111_type  n111;
-        constexpr static n112_type  n112;
-        constexpr static n121_type  n121;
-        constexpr static n123_type  n123;
-        constexpr static n211_type  n211;
-        constexpr static n213_type  n213;
-        constexpr static n321_type  n321;
-        constexpr static n432_type  n432;
+        constexpr static n111_type  n111{};
+        constexpr static n112_type  n112{};
+        constexpr static n121_type  n121{};
+        constexpr static n123_type  n123{};
+        constexpr static n211_type  n211{};
+        constexpr static n213_type  n213{};
+        constexpr static n321_type  n321{};
+        constexpr static n432_type  n432{};
 
-        constexpr static n1111_type n1111;
-        constexpr static n4231_type n4231;
+        constexpr static n1111_type n1111{};
+        constexpr static n4231_type n4231{};
 
 
         using tuple_type = std::tuple<
