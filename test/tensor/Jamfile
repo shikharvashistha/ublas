@@ -41,7 +41,7 @@ test-suite boost-ublas-tensor-test
           test_tensor_size.cpp
           test_tensor_at.cpp
           test_tensor_access_operator.cpp
-          # test_tensor_construction.cpp
+          test_tensor_construction.cpp
           # test_algorithms.cpp
           # test_einstein_notation.cpp
           # test_expression.cpp
