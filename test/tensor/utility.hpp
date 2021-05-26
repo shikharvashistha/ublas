@@ -103,6 +103,7 @@ using inner_type_t = typename inner_type<T>::type;
 namespace boost::numeric::ublas{
 
   using test_types = zip<int,float,std::complex<float>>::with_t<layout::first_order, layout::last_order>;
+  using layout_test_types = std::tuple<layout::first_order, layout::last_order>;
 
 } // namespace boost::numeric::ublas
 
