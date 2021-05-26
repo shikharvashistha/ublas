@@ -157,8 +157,9 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_dynamic,
         BOOST_REQUIRE_EQUAL ( a.rank(), 2ul);
         BOOST_REQUIRE       (!a.empty());
 
-        auto const c = a + value_type(3) * a;
-        auto const t = tensor_t(c);
+        auto const three = value_type(3);
+        auto const expr = a + three * a;
+        auto const t = tensor_t(expr);
 
         BOOST_REQUIRE_EQUAL ( t.size(), 6ul);
         BOOST_REQUIRE_EQUAL ( t.rank(), 2ul);
@@ -266,7 +267,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_dynamic,
         auto const a = vector_type(e[0], value_type(1));
         BOOST_REQUIRE_EQUAL ( a.size(), e[0]);
 
-        auto expr = a + value_type(3) * a;
+        auto const three = value_type(3);
+        auto const expr = a + three * a;
         auto const t = tensor_t(expr);
 
         BOOST_CHECK_NO_THROW( (void)t.at(1ul));
@@ -466,8 +468,9 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_static_rank,
         BOOST_REQUIRE_EQUAL ( a.rank(), 2ul);
         BOOST_REQUIRE       (!a.empty());
 
-        auto const c = a + value_type(3) * a;
-        auto const t = tensor_t(c);
+        auto const three = value_type(3);
+        auto const expr = a + three * a;
+        auto const t = tensor_t(expr);
 
         BOOST_REQUIRE_EQUAL ( t.size(), 6ul);
         BOOST_REQUIRE_EQUAL ( t.rank(), 2ul);
@@ -550,7 +553,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_static_rank,
         BOOST_REQUIRE_EQUAL ( a.size1(), e[0]);
         BOOST_REQUIRE_EQUAL ( a.size2(), e[1]);
 
-        auto const expr = a + value_type(3) * a;
+        auto const three = value_type(3);
+        auto const expr = a + three * a;
 
         auto const t = tensor_t(expr);
 
@@ -578,7 +582,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_static_rank,
         auto const a = vector_type(e[0], value_type(1));
         BOOST_REQUIRE_EQUAL ( a.size(), e[0]);
 
-        auto expr = a + value_type(3) * a;
+        auto const three = value_type(3);
+        auto const expr = a + three * a;
         auto const t = tensor_t(expr);
 
         BOOST_CHECK_NO_THROW( (void)t.at(1ul));
@@ -765,9 +770,10 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_static,
         BOOST_REQUIRE_EQUAL ( a.size(), 6ul);
         BOOST_REQUIRE_EQUAL ( a.rank(), 2ul);
         BOOST_REQUIRE       (!a.empty());
-
-        auto const c = a + value_type(3) * a;
-        auto const t = tensor_t(c);
+        
+        auto const three = value_type(3);
+        auto const expr = a + three * a;
+        auto const t = tensor_t(expr);
 
         BOOST_REQUIRE_EQUAL ( t.size(), 6ul);
         BOOST_REQUIRE_EQUAL ( t.rank(), 2ul);
@@ -855,7 +861,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_static,
         BOOST_REQUIRE_EQUAL ( a.size1(), e[0]);
         BOOST_REQUIRE_EQUAL ( a.size2(), e[1]);
 
-        auto const expr = a + value_type(3) * a;
+        auto const three = value_type(3);
+        auto const expr = a + three * a;
 
         auto const t = tensor_t(expr);
 
