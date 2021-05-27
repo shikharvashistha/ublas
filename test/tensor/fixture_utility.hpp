@@ -320,7 +320,6 @@ namespace boost::numeric::ublas{
     using tuple_fixture_tensor_static = fixture_tensor_static<typename TupleType::first_type, typename TupleType::second_type>;
 
     template<typename FixtureType, typename FnType>
-        requires std::is_invocable_v<FnType, std::size_t, std::tuple_element_t<0,typename std::decay_t<FixtureType>::tuple_type>>
     constexpr auto for_each_fixture(FixtureType&& fixture, FnType&& fn){
         for_each_in_tuple(fixture.collection, std::forward<FnType>(fn));
     }
