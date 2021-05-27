@@ -11,24 +11,25 @@
 //
 
 #include <boost/test/unit_test.hpp>
-#include "fixture_utility.hpp"
+#include "../fixture_utility.hpp"
 
-BOOST_AUTO_TEST_SUITE(test_extents_at, 
-    *boost::unit_test::description("Validate At Method")
+BOOST_AUTO_TEST_SUITE(test_extents_access_operator, 
+    *boost::unit_test::description("Validate Access Operator")
     *boost::unit_test::depends_on("test_extents_size")
 )
+
 
 constexpr auto check_at(auto const& e, std::initializer_list<std::size_t> l){
     auto i = 0ul;
     for(auto const& el : l){
-        BOOST_REQUIRE_EQUAL(e.at(i++), el);
+        BOOST_REQUIRE_EQUAL(e[i++], el);
     }
 };
 
 BOOST_FIXTURE_TEST_CASE(test_extents_dynamic_function, 
     boost::numeric::ublas::fixture_extents_dynamic<std::size_t>,
-    *boost::unit_test::label("[read]boost::numeric::ublas::extents<>::at")
-    *boost::unit_test::description("Testing the dynamic extents' read [at] method"))
+    *boost::unit_test::label("[read]boost::numeric::ublas::extents<>::operator[]")
+    *boost::unit_test::description("Testing the dynamic extents' read [operator[]]"))
 {
     namespace ublas = boost::numeric::ublas;
 
@@ -66,8 +67,8 @@ BOOST_FIXTURE_TEST_CASE(test_extents_dynamic_function,
 
 BOOST_FIXTURE_TEST_CASE(test_extents_static_rank_function,
     boost::numeric::ublas::fixture_extents_static_rank<std::size_t>,
-    *boost::unit_test::label("[read]boost::numeric::ublas::extents<N>::at")
-    *boost::unit_test::description("Testing the static rank extents' read [at] method"))
+    *boost::unit_test::label("[read]boost::numeric::ublas::extents<N>::operator[]")
+    *boost::unit_test::description("Testing the static rank extents' read [operator[]]"))
 {
     namespace ublas = boost::numeric::ublas;
 
@@ -103,8 +104,8 @@ BOOST_FIXTURE_TEST_CASE(test_extents_static_rank_function,
 
 BOOST_FIXTURE_TEST_CASE(test_extents_static_function,
     boost::numeric::ublas::fixture_extents_static<std::size_t>,
-    *boost::unit_test::label("[read]boost::numeric::ublas::extents<...>::at")
-    *boost::unit_test::description("Testing the static extents' read [at] method"))
+    *boost::unit_test::label("[read]boost::numeric::ublas::extents<...>::operator[]")
+    *boost::unit_test::description("Testing the static extents' read [operator[]]"))
 {
     namespace ublas = boost::numeric::ublas;
 

@@ -32,27 +32,26 @@ explicit unit_test_framework ;
 test-suite boost-ublas-tensor-test
     :
     [ run test_main.cpp
-          test_extents_empty.cpp
-          test_extents_size.cpp
-          test_extents_at.cpp
-          test_extents_access_operator.cpp
-          test_extents_construction.cpp
-          test_tensor_empty.cpp
-          test_tensor_size.cpp
-          test_tensor_at.cpp
-          test_tensor_access_operator.cpp
-          test_tensor_construction.cpp
-          test_extents_assignment_operator.cpp
-          test_tensor_assignment_operator.cpp
+          extents/test_extents_empty.cpp
+          extents/test_extents_size.cpp
+          extents/test_extents_at.cpp
+          extents/test_extents_access_operator.cpp
+          extents/test_extents_construction.cpp
+          extents/test_extents_assignment_operator.cpp
+          extents/test_extents_is_scalar.cpp
+          extents/test_extents_is_vector.cpp
+          extents/test_extents_is_matrix.cpp
+          extents/test_extents_is_tensor.cpp
+          extents/test_extents_is_valid.cpp
+          extents/test_extents_product.cpp
+          extents/test_extents_comparision.cpp
+          tensor/test_tensor_empty.cpp
+          tensor/test_tensor_size.cpp
+          tensor/test_tensor_at.cpp
+          tensor/test_tensor_access_operator.cpp
+          tensor/test_tensor_construction.cpp
+          tensor/test_tensor_assignment_operator.cpp
           test_strides.cpp
-          test_extents_is_scalar.cpp
-          test_extents_is_vector.cpp
-          test_extents_is_matrix.cpp
-          test_extents_is_tensor.cpp
-          test_extents_is_valid.cpp
-          test_extents_product.cpp
-          test_extents_comparision.cpp
-        #   test_extents_functions.cpp
           # test_algorithms.cpp
           # test_einstein_notation.cpp
           # test_expression.cpp

@@ -11,7 +11,7 @@
 //
 
 #include <boost/test/unit_test.hpp>
-#include "fixture_utility.hpp"
+#include "../fixture_utility.hpp"
 
 BOOST_AUTO_TEST_SUITE(test_tensor_at, 
     *boost::unit_test::description("Validate At Method")

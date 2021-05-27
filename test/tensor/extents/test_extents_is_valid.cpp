@@ -12,7 +12,7 @@
 
 
 #include <boost/test/unit_test.hpp>
-#include "fixture_utility.hpp"
+#include "../fixture_utility.hpp"
 
 
 BOOST_AUTO_TEST_SUITE(test_extents_is_valid, 
