@@ -17,17 +17,6 @@ BOOST_AUTO_TEST_SUITE(test_tensor_comparision_with_tensor_expression,
     * boost::unit_test::description("Validate Comparision Operators/Functions With Tensor Expression")
 )
 
-// NOTE: std::iota cannot fill the container with the complex number
-// because the complex number does not support increment operator(++)
-template<typename ValueType>
-constexpr auto iota(auto& c, ValueType v) noexcept{
-    std::generate(std::begin(c), std::end(c), [v = v]() mutable{
-        auto prev = v;
-        v += ValueType(1);
-        return prev;
-    });
-}
-
 BOOST_TEST_DECORATOR(
     *boost::unit_test::label("compare_tensor")
     *boost::unit_test::description("Testing the dynamic tensor's comparision operators")
@@ -47,8 +36,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_dynamic,
         BOOST_TEST_CONTEXT("[Comparision Operator] rank("<< t1.rank() <<") dynamic tensor"){
             auto t2 = t1;
             
-            iota(t1, v);
-            iota(t2, v + value_type{2});
+            ublas::iota(t1, v);
+            ublas::iota(t2, v + value_type{2});
 
             BOOST_CHECK(t1 == t1);
             BOOST_CHECK(t1 != t2);
@@ -100,8 +89,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_static_rank,
         BOOST_TEST_CONTEXT("[Comparision Operator] static rank("<< t1.rank() <<") tensor"){
             auto t2 = t1;
             
-            iota(t1, v);
-            iota(t2, v + value_type{2});
+            ublas::iota(t1, v);
+            ublas::iota(t2, v + value_type{2});
 
             BOOST_CHECK(t1 == t1);
             BOOST_CHECK(t1 != t2);
@@ -153,8 +142,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_static,
         BOOST_TEST_CONTEXT("[Comparision Operator] rank("<< t1.rank() <<") static tensor"){
             auto t2 = t1;
             
-            iota(t1, v);
-            iota(t2, v + value_type{2});
+            ublas::iota(t1, v);
+            ublas::iota(t2, v + value_type{2});
 
             BOOST_CHECK(t1 == t1);
             BOOST_CHECK(t1 != t2);

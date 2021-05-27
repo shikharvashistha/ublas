@@ -106,7 +106,18 @@ namespace boost::numeric::ublas{
   using test_types = zip<int,float,std::complex<float>,double_extended>::with_t<layout::first_order, layout::last_order>;
   using layout_test_types = std::tuple<layout::first_order, layout::last_order>;
 
+  // NOTE: std::iota cannot fill the container with the complex number
+  // because the complex number does not support increment operator(++)
+  template<typename ValueType>
+  constexpr auto iota(auto& c, ValueType v) noexcept{
+      std::generate(std::begin(c), std::end(c), [v = v]() mutable{
+          auto prev = v;
+          v += ValueType(1);
+          return prev;
+      });
+  }
 } // namespace boost::numeric::ublas
+
 
 
 // creates e.g.
