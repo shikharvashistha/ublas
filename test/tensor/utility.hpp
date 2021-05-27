@@ -55,8 +55,13 @@ using zip = zip_helper<std::tuple<>,types...>;
 template<class UnaryOp, class ... Elements>
 constexpr void for_each_in_tuple(std::tuple<Elements...> const& tuple, UnaryOp&& op)
 {
+  using tuple_type = std::tuple<Elements...>;
   auto invoke_op_for_tuple = [&]<std::size_t... Is>(std::index_sequence<Is...>) {
-    (..., std::invoke(op, Is, std::get<Is>(tuple)));
+    if constexpr(std::is_invocable_v<UnaryOp, std::integral_constant<std::size_t, 0ul>, std::tuple_element_t<0,tuple_type>>){
+      (..., std::invoke(op, std::integral_constant<std::size_t, Is>{}, std::get<Is>(tuple)));
+    }else{
+      (..., std::invoke(op, Is, std::get<Is>(tuple)));
+    }
   };
 
   invoke_op_for_tuple(std::make_index_sequence<std::tuple_size_v<std::tuple<Elements...>>>{});
@@ -66,7 +71,7 @@ namespace boost::numeric::ublas
 {
 
 template<class UnaryOp, class TA, class TB, std::size_t ... is>
-void for_each_in_index(std::index_sequence<is...>, TA const& a, TB const& b, UnaryOp&& op)
+constexpr void for_each_in_index(std::index_sequence<is...>, TA const& a, TB const& b, UnaryOp&& op)
 {
   (..., std::invoke(op,a,b,std::index_sequence<is>{}) );
 }
