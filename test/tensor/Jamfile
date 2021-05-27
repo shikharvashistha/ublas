@@ -57,6 +57,8 @@ test-suite boost-ublas-tensor-test
           tensor/test_tensor_operator_arithmetic_binary.cpp
           tensor/test_tensor_operator_arithmetic_unary.cpp
           tensor/test_tensor_operator_arithmetic_assignment.cpp
+          tensor/test_tensor_expression_evaluation_retrieve_extents.cpp
+          tensor/test_tensor_expression_evaluation_all_extents_equal.cpp
           test_strides.cpp
           # test_algorithms.cpp
           # test_einstein_notation.cpp
