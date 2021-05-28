@@ -68,6 +68,7 @@ test-suite boost-ublas-tensor-test
           algorithm/test_algorithm_trans.cpp
           test_strides.cpp
           test_multi_index.cpp
+          test_multi_index_utility.cpp
           # test_algorithms.cpp
           # test_einstein_notation.cpp
           # test_expression.cpp
@@ -83,7 +84,6 @@ test-suite boost-ublas-tensor-test
           # test_fixed_rank_tensor.cpp
           # test_fixed_rank_tensor_matrix_vector.cpp          
           # test_functions.cpp
-          # test_multi_index_utility.cpp
           # test_multiplication.cpp
           # test_operators_arithmetic.cpp
           # test_operators_comparison.cpp
