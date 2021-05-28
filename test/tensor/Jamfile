@@ -62,6 +62,10 @@ test-suite boost-ublas-tensor-test
           tensor/test_tensor_expression_access.cpp
           tensor/test_tensor_unary_expression.cpp
           tensor/test_tensor_binary_expression.cpp
+          algorithm/test_algorithm_copy.cpp
+          algorithm/test_algorithm_transform.cpp
+          algorithm/test_algorithm_accumulate.cpp
+          algorithm/test_algorithm_trans.cpp
           test_strides.cpp
           test_multi_index.cpp
           # test_algorithms.cpp
