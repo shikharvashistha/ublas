@@ -120,14 +120,6 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
     });
 }
 
-template<std::size_t N, typename FnType>
-constexpr auto static_for_each(FnType&& fn) noexcept{
-    auto helper = [fn = std::forward<FnType>(fn)]<std::size_t... Is>(std::index_sequence<Is...>){
-        (..., std::invoke(fn, std::integral_constant<std::size_t, Is>{}));
-    };
-    helper(std::make_index_sequence<N>{});
-}
-
 BOOST_TEST_DECORATOR(
     *boost::unit_test::label("ttm")
     *boost::unit_test::description("Testing ttm for static tensor")

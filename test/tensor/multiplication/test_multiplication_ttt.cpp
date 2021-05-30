@@ -26,14 +26,6 @@ constexpr auto calculate_nc_base(auto& out, auto const& na, auto const& nb, std:
     std::copy(begin(nb), begin(nb) + s, it);
 };
 
-template<std::size_t N, typename FnType>
-constexpr auto static_for_each(FnType&& fn) noexcept{
-    auto helper = [fn = std::forward<FnType>(fn)]<std::size_t... Is>(std::index_sequence<Is...>){
-        (..., std::invoke(fn, std::integral_constant<std::size_t, Is>{}));
-    };
-    helper(std::make_index_sequence<N>{});
-}
-
 BOOST_TEST_DECORATOR(
     *boost::unit_test::label("ttt")
     *boost::unit_test::description("Testing ttt for dynamic tensor")

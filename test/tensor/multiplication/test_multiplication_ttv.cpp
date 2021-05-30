@@ -130,14 +130,6 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
     });
 }
 
-template<std::size_t N, typename FnType>
-constexpr auto static_for_each(FnType&& fn) noexcept{
-    auto helper = [fn = std::forward<FnType>(fn)]<std::size_t... Is>(std::index_sequence<Is...>){
-        (..., std::invoke(fn, std::integral_constant<std::size_t, Is>{}));
-    };
-    helper(std::make_index_sequence<N>{});
-}
-
 template<typename E, std::size_t N, std::size_t M>
 constexpr auto generate_result_extents() noexcept{
     namespace ublas = boost::numeric::ublas;

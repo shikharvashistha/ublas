@@ -51,20 +51,28 @@ struct zip_helper<std::tuple<types3...>, type1, types1...>
 template<class ... types>
 using zip = zip_helper<std::tuple<>,types...>;
 
+template<std::size_t N, typename FnType>
+constexpr auto static_for_each(FnType&& fn) noexcept{
+    auto helper = [fn = std::forward<FnType>(fn)]<std::size_t... Is>(std::index_sequence<Is...>){
+        (..., std::invoke(fn, std::integral_constant<std::size_t, Is>{}));
+    };
+    helper(std::make_index_sequence<N>{});
+}
 
 template<class UnaryOp, class ... Elements>
 constexpr void for_each_in_tuple(std::tuple<Elements...> const& tuple, UnaryOp&& op)
 {
   using tuple_type = std::tuple<Elements...>;
-  auto invoke_op_for_tuple = [&]<std::size_t... Is>(std::index_sequence<Is...>) {
-    if constexpr(std::is_invocable_v<UnaryOp, std::integral_constant<std::size_t, 0ul>, std::tuple_element_t<0,tuple_type>>){
-      (..., std::invoke(op, std::integral_constant<std::size_t, Is>{}, std::get<Is>(tuple)));
+  auto invoke_op_for_tuple = [&tuple, op = std::forward<UnaryOp>(op)]<typename IType>(IType id) {
+    constexpr auto i = IType::value;
+    if constexpr(std::is_invocable_v<UnaryOp, IType, std::tuple_element_t<i,tuple_type>>){
+      std::invoke(op, id, std::get<i>(tuple));
     }else{
-      (..., std::invoke(op, Is, std::get<Is>(tuple)));
+      std::invoke(op, i, std::get<i>(tuple));
     }
   };
 
-  invoke_op_for_tuple(std::make_index_sequence<std::tuple_size_v<std::tuple<Elements...>>>{});
+  static_for_each<sizeof...(Elements)>(std::move(invoke_op_for_tuple));
 }
 
 namespace boost::numeric::ublas
