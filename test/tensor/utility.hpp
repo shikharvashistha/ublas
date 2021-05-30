@@ -117,6 +117,7 @@ using inner_type_t = typename inner_type<T>::type;
 namespace boost::numeric::ublas{
   using double_extended = boost::multiprecision::cpp_bin_float_double_extended;
   using test_types = zip<int,float,std::complex<float>,double_extended>::with_t<layout::first_order, layout::last_order>;
+  using cpp_std_types = zip<int,float,std::complex<float>>::with_t<layout::first_order, layout::last_order>;
   using test_types_with_no_layout = std::tuple<std::int32_t,std::int64_t,float,double,std::complex<float>>;
   using layout_test_types = std::tuple<layout::first_order, layout::last_order>;
 
