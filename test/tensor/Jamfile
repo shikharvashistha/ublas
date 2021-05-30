@@ -74,6 +74,15 @@ test-suite boost-ublas-tensor-test
           multiplication/test_multiplication_inner.cpp
           multiplication/test_multiplication_outer.cpp
           multiplication/test_multiplication_ttt.cpp
+          functions/test_functions_vector.cpp
+          functions/test_functions_matrix.cpp
+          functions/test_functions_tensor.cpp
+          functions/test_functions_tensor_permutation.cpp
+          functions/test_functions_inner.cpp
+          functions/test_functions_norm.cpp
+          functions/test_functions_real_imag_conj.cpp
+          functions/test_functions_outer.cpp
+          functions/test_functions_trans.cpp
           test_strides.cpp
           test_multi_index.cpp
           test_multi_index_utility.cpp
