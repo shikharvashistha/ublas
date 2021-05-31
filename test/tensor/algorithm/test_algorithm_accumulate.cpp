@@ -34,6 +34,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_dynamic,
     using value_type = typename TestTupleType::first_type;
     using layout_type = typename TestTupleType::second_type;
     using vector_t = std::vector<value_type>;
+    using inner_t = inner_type_t<value_type>;
 
     auto const& self = static_cast<fixture_t const&>(*this);
     ublas::for_each_fixture(self, [](auto /*id*/, auto const& n){
@@ -56,7 +57,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_dynamic,
             
             auto const acc = ublas::accumulate( rank, n.data(), a.data(), wa.data(), v);
 
-            auto const sum = static_cast<value_type>( (s * (s + one)) / two );
+            auto const sum = value_type{ static_cast<inner_t>( (s * (s + one)) / two ) };
 
             BOOST_CHECK_EQUAL( acc, sum );
 
@@ -114,6 +115,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
     using value_type = typename TestTupleType::first_type;
     using layout_type = typename TestTupleType::second_type;
     using vector_t = std::vector<value_type>;
+    using inner_t = inner_type_t<value_type>;
 
     auto const& self = static_cast<fixture_t const&>(*this);
     ublas::for_each_fixture(self, [](auto /*id*/, auto const& n){
@@ -137,7 +139,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
 
             auto const acc = ublas::accumulate( rank, n.data(), a.data(), wa.data(), v);
 
-            auto const sum = static_cast<value_type>( (s * (s + one)) / two );
+            auto const sum = value_type{ static_cast<inner_t>( (s * (s + one)) / two ) };
 
             BOOST_CHECK_EQUAL( acc, sum );
 
@@ -196,6 +198,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
     using value_type = typename TestTupleType::first_type;
     using layout_type = typename TestTupleType::second_type;
     using vector_t = std::vector<value_type>;
+    using inner_t = inner_type_t<value_type>;
 
     auto const& self = static_cast<fixture_t const&>(*this);
     ublas::for_each_fixture(self, []<typename extents_type>(auto /*id*/, extents_type const& n){
@@ -222,7 +225,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
 
                 auto const acc = ublas::accumulate( rank, n.data(), a.data(), wa.data(), v);
 
-                auto const sum = static_cast<value_type>( (s * (s + one)) / two );
+                auto const sum = value_type{ static_cast<inner_t>( (s * (s + one)) / two ) };
 
                 BOOST_CHECK_EQUAL( acc, sum );
 

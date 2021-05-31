@@ -34,6 +34,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_dynamic,
     using layout_type = typename TestTupleType::second_type;
     using fixture_type = ublas::fixture_extents_dynamic<std::size_t>;
     using vector_t  = std::vector<value_type>;
+    using inner_t = inner_type_t<value_type>;
 
     auto const& self = static_cast<fixture_type const&>(*this);
 
@@ -67,7 +68,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_dynamic,
                     a.data(), na.data(), wa.data(),
                     b.data());
 
-                auto v = static_cast<value_type>(na[m]);
+                auto v = value_type{static_cast<inner_t>(na[m])};
                 BOOST_CHECK(std::equal(c.begin(),c.end(),a.begin(), [v](auto cc, auto aa){return cc == v*aa;}));
             }
         }
@@ -88,6 +89,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
     using layout_type = typename TestTupleType::second_type;
     using fixture_type = ublas::fixture_extents_static_rank<std::size_t>;
     using vector_t  = std::vector<value_type>;
+    using inner_t = inner_type_t<value_type>;
 
     auto const& self = static_cast<fixture_type const&>(*this);
 
@@ -125,7 +127,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
                         a.data(), na.data(), wa.data(),
                         b.data());
 
-                    auto v = static_cast<value_type>(na[m]);
+                    auto v = value_type{static_cast<inner_t>(na[m])};
                     BOOST_CHECK(std::equal(c.begin(),c.end(),a.begin(), [v](auto cc, auto aa){return cc == v*aa;}));
                 }
             }
@@ -179,6 +181,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
     using value_type = typename TestTupleType::first_type;
     using layout_type = typename TestTupleType::second_type;
     using fixture_type = ublas::fixture_extents_static<std::size_t>;
+    using inner_t = inner_type_t<value_type>;
 
     auto const& self = static_cast<fixture_type const&>(*this);
 
@@ -215,7 +218,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
                         a.data(), na.data(), wa.data(),
                         b.data());
 
-                    auto v = static_cast<value_type>(ublas::get_v<extents_type,m>);
+                    auto v = value_type{static_cast<inner_t>(na[m])};
                     BOOST_CHECK(std::equal(c.begin(),c.end(),a.begin(), [v](auto cc, auto aa){return cc == v*aa;}));
                 }
             });

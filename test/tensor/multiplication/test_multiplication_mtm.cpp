@@ -34,6 +34,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_dynamic,
     using layout_type = typename TestTupleType::second_type;
     using fixture_type = ublas::fixture_extents_dynamic<std::size_t>;
     using vector_t  = std::vector<value_type>;
+    using inner_t = inner_type_t<value_type>;
 
     auto const& self = static_cast<fixture_type const&>(*this);
 
@@ -62,7 +63,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_dynamic,
                 b.data(), nb.data(), wb.data()
             );
 
-            auto v = value_type(na[1])*a[0];
+            auto v = value_type{ static_cast<inner_t>(na[1]) }*a[0];
             BOOST_CHECK(std::all_of(c.begin(),c.end(), [v](auto cc){return cc == v;}));
         }
     });
@@ -82,6 +83,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
     using layout_type = typename TestTupleType::second_type;
     using fixture_type = ublas::fixture_extents_static_rank<std::size_t>;
     using vector_t  = std::vector<value_type>;
+    using inner_t = inner_type_t<value_type>;
 
     auto const& self = static_cast<fixture_type const&>(*this);
 
@@ -110,7 +112,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
                     b.data(), nb.data(), wb.data()
                 );
 
-                auto v = value_type(na[1])*a[0];
+                auto v = value_type{ static_cast<inner_t>(na[1]) }*a[0];
                 BOOST_CHECK(std::all_of(c.begin(),c.end(), [v](auto cc){return cc == v;}));
             }
         }
@@ -132,6 +134,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
     using value_type = typename TestTupleType::first_type;
     using layout_type = typename TestTupleType::second_type;
     using fixture_type = ublas::fixture_extents_static<std::size_t>;
+    using inner_t = inner_type_t<value_type>;
 
     auto const& self = static_cast<fixture_type const&>(*this);
 
@@ -166,7 +169,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
                     b.data(), nb.data(), wb.data()
                 );
 
-                auto v = value_type(na[1])*a[0];
+                auto v = value_type{ static_cast<inner_t>(na[1]) }*a[0];
                 BOOST_CHECK(std::all_of(c.begin(),c.end(), [v](auto cc){return cc == v;}));
             }
 
