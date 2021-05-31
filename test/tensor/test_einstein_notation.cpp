@@ -214,40 +214,42 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_tensor_static_rank,
 
     }
 
-    BOOST_TEST_CONTEXT("[Static Rank Tensor Einstien Notation] tensor with LHS[4, 3] : RHS[3, 4, 2]"){
+    // FIXME: Enable this test after the issue #121 has been fixed.
+    // BOOST_TEST_CONTEXT("[Static Rank Tensor Einstien Notation] tensor with LHS[4, 3] : RHS[3, 4, 2]"){
         
-        auto A = tensor2_t(4,3);
-        auto B = tensor3_t(3,4,2);
+    //     auto A = tensor2_t(4,3);
+    //     auto B = tensor3_t(3,4,2);
 
-        for(auto j = 0u; j < A.size(1); ++j){
-            for(auto i = 0u; i < A.size(0); ++i){
-                A.at( i,j ) = value_type{ static_cast< inner_t >(i+1) };
-            }
-        }
+    //     for(auto j = 0u; j < A.size(1); ++j){
+    //         for(auto i = 0u; i < A.size(0); ++i){
+    //             A.at( i,j ) = value_type{ static_cast< inner_t >(i+1) };
+    //         }
+    //     }
 
 
-        for(auto k = 0u; k < B.size(2); ++k){
-            for(auto j = 0u; j < B.size(1); ++j){
-                for(auto i = 0u; i < B.size(0); ++i){
-                    B.at( i,j,k ) = value_type{ static_cast< inner_t >(i+1) };
-                }
-            }
-        }
+    //     for(auto k = 0u; k < B.size(2); ++k){
+    //         for(auto j = 0u; j < B.size(1); ++j){
+    //             for(auto i = 0u; i < B.size(0); ++i){
+    //                 B.at( i,j,k ) = value_type{ static_cast< inner_t >(i+1) };
+    //             }
+    //         }
+    //     }
 
-        auto AB = A(index::_d,index::_f) * B(index::_f,index::_d,index::_);
+    //     auto AB = A(index::_d,index::_f) * B(index::_f,index::_d,index::_);
 
-        // n*(n+1)/2;
-        auto const nf = ( B.size(0) * (B.size(0)+1) / 2 );
-        auto const nd = ( A.size(0) * (A.size(0)+1) / 2 );
+    //     // n*(n+1)/2;
+    //     auto const nf = ( B.size(0) * (B.size(0)+1) / 2 );
+    //     auto const nd = ( A.size(0) * (A.size(0)+1) / 2 );
 
-        for(auto i = 0u; i < AB.size(0); ++i){
-            auto const rhs = value_type{ static_cast< inner_t >(nf * nd) };
-            BOOST_CHECK_EQUAL ( AB.at( i  ) , rhs );
-        }
+    //     for(auto i = 0u; i < AB.size(0); ++i){
+    //         auto const rhs = value_type{ static_cast< inner_t >(nf * nd) };
+    //         BOOST_CHECK_EQUAL ( AB.at( i  ) , rhs );
+    //     }
 
-    }
+    // }
 }
 
+// TODO: Add support of static tensor product then enable it.
 // BOOST_TEST_DECORATOR(
 //     *boost::unit_test::label("einstien_notation")
 //     *boost::unit_test::description("Testing the einstien notation for static tensor")
