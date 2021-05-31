@@ -166,13 +166,13 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
 
         if constexpr(rank > 1ul){
 
-            constexpr auto one = std::size_t{1};
-            constexpr auto two = std::size_t{2};
+            static constexpr auto one = std::size_t{1};
+            static constexpr auto two = std::size_t{2};
 
             BOOST_TEST_CONTEXT("[Permutated TTT Static Rank Tensor] testing for rank(" << rank << ")"){
                 auto wa = ublas::to_strides(na,layout_type{});
                 auto a  = vector_t(p, value_type{2});
-                constexpr auto pa  = rank;
+                static constexpr auto pa  = rank;
                 auto pia = std::vector<std::size_t>(pa);
                 std::iota( pia.begin(), pia.end(), one );
 
@@ -188,10 +188,10 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
                     auto nb = permute_extents( pib, na  );
                     auto wb = ublas::to_strides(nb,layout_type{});
                     auto b  = vector_t(ublas::product(nb), value_type{3});
-                    constexpr auto pb = std::tuple_size_v<decltype(nb)>;
+                    static constexpr auto pb = std::tuple_size_v<decltype(nb)>;
 
                     // the number of contractions is changed.
-                    static_for_each<pa>([&a, &pia, &pib_inv, &nb, &wb, &b, &na, &wa, one, two, pa, pb]<typename IType>(IType /*id*/){
+                    static_for_each<pa>([&a, &pia, &pib_inv, &nb, &wb, &b, &na, &wa]<typename IType>(IType /*id*/){
                         constexpr auto q = IType::value;
                         constexpr auto r  = pa - q;
                         constexpr auto s  = pb - q;

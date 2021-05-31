@@ -88,7 +88,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_static_rank,
 
     ublas::for_each_fixture(self, []<typename tensor_type>(auto /*id*/, tensor_type a){
         
-        constexpr auto rank = a.rank();
+        static constexpr auto rank = a.rank();
 
         if constexpr (rank > 1ul) {
         

@@ -116,27 +116,27 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
     auto const& self = static_cast<fixture_type const&>(*this);
 
     ublas::for_each_fixture(self, []<typename extents_type>(auto /*id*/, extents_type const& na){
-        constexpr auto const rank = ublas::size_v<extents_type>;
+        static constexpr auto rank = ublas::size_v<extents_type>;
         auto const p = ublas::product(na);
         using extents_value_type = typename extents_type::value_type;
 
         if constexpr(rank > 1ul){
 
-            constexpr auto one = std::size_t{1};
-            constexpr auto two = std::size_t{2};
+            static constexpr auto one = std::size_t{1};
+            static constexpr auto two = std::size_t{2};
             
             auto wa = ublas::to_strides(na,layout_type{});
             auto a  = vector_t(p, value_type{2});
-            constexpr auto pa = rank;
+            static constexpr auto pa = rank;
 
             auto const& nb = na;
             auto wb = ublas::to_strides(nb,layout_type{});
             auto b  = vector_t(ublas::product(nb), value_type{3});
-            constexpr auto pb = ublas::size_v<decltype(nb)>;
+            static constexpr auto pb = ublas::size_v<decltype(nb)>;
 
             BOOST_TEST_CONTEXT("[TTT Static Rank Tensor] testing for rank(" << rank << ")"){
 
-                static_for_each<pa>([&]<typename IType>(IType /*id*/){
+                static_for_each<pa>([&wa, &a, &na, &nb, &wb, &b]<typename IType>(IType /*id*/){
                     constexpr auto q = IType::value;
                     constexpr auto r  = pa - q;
                     constexpr auto s  = pb - q;
@@ -221,18 +221,18 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
     auto const& self = static_cast<fixture_type const&>(*this);
 
     ublas::for_each_fixture(self, []<typename extents_type>(auto /*id*/, extents_type const& na){
-        constexpr auto const rank = ublas::size_v<extents_type>;
-        constexpr auto p = ublas::product_v<extents_type>;
+        static constexpr auto rank = ublas::size_v<extents_type>;
+        static constexpr auto p = ublas::product_v<extents_type>;
 
         if constexpr(rank > 1ul){
 
-            constexpr auto one = std::size_t{1};
+            static constexpr auto one = std::size_t{1};
             
             // FIXME: remove after the fix
             auto wa = get_strides<layout_type>(ublas::to_array_v<extents_type>);
             auto a  = std::array<value_type, p>();
             std::fill(a.begin(), a.end(), value_type{1});
-            constexpr auto pa = rank;
+            static constexpr auto pa = rank;
 
             auto const& nb = na;
             using nb_type = decltype(nb);
@@ -242,11 +242,11 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
             auto b  = std::array<value_type, ublas::product_v<nb_type>>();
             std::fill(b.begin(), b.end(), value_type{3});
 
-            constexpr auto pb = ublas::size_v<nb_type>;
+            static constexpr auto pb = ublas::size_v<nb_type>;
 
             BOOST_TEST_CONTEXT("[TTT Static Rank Tensor] testing for rank(" << rank << ")"){
 
-                static_for_each<pa>([&]<typename IType>(IType /*id*/){
+                static_for_each<pa>([&wa, &a, &nb, &wb, &b, &na]<typename IType>(IType /*id*/){
                     constexpr auto q = IType::value;
                     constexpr auto r  = pa - q;
                     constexpr auto s  = pb - q;

@@ -138,19 +138,19 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
 
     ublas::for_each_fixture(self, []<typename extents_type>(auto /*id*/, extents_type const& /*na*/){
         using extents_value_type = typename extents_type::value_type;
-        constexpr auto rank = ublas::size_v<extents_type>;
-        constexpr auto const p = ublas::product_v<extents_type>;
+        static constexpr auto rank = ublas::size_v<extents_type>;
+        static constexpr auto p = ublas::product_v<extents_type>;
 
         if constexpr (rank > 1ul){
             
-            constexpr auto na = ublas::to_array_v<extents_type>;
+            static constexpr auto na = ublas::to_array_v<extents_type>;
             
             BOOST_TEST_CONTEXT("[TTM Static Rank Tensor] testing for rank(" << rank << ")"){
                 auto a  = std::array<value_type, p>();
                 std::fill(a.begin(), a.end(), value_type{2});
                 auto wa = ublas::to_strides_v<extents_type,layout_type>;
                 
-                static_for_each<rank>([&a, &wa, na]<typename IType>(IType /*id*/){
+                static_for_each<rank>([&a, &wa]<typename IType>(IType /*id*/){
                     constexpr auto m = IType::value;
 
                     using nb_type = ublas::extents_core<extents_value_type, na[m], na[m] >;
