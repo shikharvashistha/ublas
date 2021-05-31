@@ -68,6 +68,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_dynamic,
     using layout_type = typename TestTupleType::second_type;
     using fixture_type = ublas::fixture_extents_dynamic<std::size_t>;
     using vector_t  = std::vector<value_type>;
+    using inner_t = inner_type_t<value_type>;
 
     auto const& self = static_cast<fixture_type const&>(*this);
 
@@ -129,7 +130,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_dynamic,
                     for(auto j = r; j < pa; ++j)
                         acc *= na[pia[j]-1];
 
-                    auto v = static_cast<value_type>(acc) * a[0] * b[0];
+                    auto v = value_type{ static_cast<inner_t>(acc) } * a[0] * b[0];
 
                     BOOST_CHECK( std::all_of(c.begin(),c.end(), [v](auto cc){return cc == v; } ) );
 
@@ -156,6 +157,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
     using layout_type = typename TestTupleType::second_type;
     using fixture_type = ublas::fixture_extents_static_rank<std::size_t>;
     using vector_t  = std::vector<value_type>;
+    using inner_t = inner_type_t<value_type>;
 
     auto const& self = static_cast<fixture_type const&>(*this);
 
@@ -219,7 +221,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
                         for(auto j = r; j < pa; ++j)
                             acc *= na[pia[j]-1];
 
-                        auto v = static_cast<value_type>(acc) * a[0] * b[0];
+                        auto v = value_type{ static_cast<inner_t>(acc) } * a[0] * b[0];
 
                         BOOST_CHECK( std::all_of(c.begin(),c.end(), [v](auto cc){return cc == v; } ) );
                     });

@@ -103,14 +103,14 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
         
         using extents_value_type = typename outer_extents_type::value_type;
 
-        constexpr auto a_rank = std::tuple_size_v<outer_extents_type>;
+        static constexpr auto a_rank = std::tuple_size_v<outer_extents_type>;
         auto const ap = ublas::product(na);
 
         if constexpr(a_rank >= 2ul){
             auto a = vector_t(ap, value_type{2});
             auto wa = ublas::to_strides(na,layout_type{});
 
-            ublas::for_each_fixture(self, [&a, &wa, &na, a_rank]<typename inner_extents_type>(auto /*id*/, inner_extents_type const& nb) {
+            ublas::for_each_fixture(self, [&a, &wa, &na]<typename inner_extents_type>(auto /*id*/, inner_extents_type const& nb) {
                 constexpr auto b_rank = std::tuple_size_v<inner_extents_type>;
                 auto const bp = ublas::product(nb);
 
@@ -175,8 +175,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
 
     ublas::for_each_fixture(self, [&self]<typename outer_extents_type>(auto /*id*/, outer_extents_type const& na){
 
-        constexpr auto a_rank = ublas::size_v<outer_extents_type>;
-        constexpr auto ap = ublas::product_v<outer_extents_type>;
+        static constexpr auto a_rank = ublas::size_v<outer_extents_type>;
+        static constexpr auto ap = ublas::product_v<outer_extents_type>;
 
         if constexpr(a_rank >= 2ul){
             auto a = std::array<value_type, ap>();
@@ -184,7 +184,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
 
             auto wa = get_strides<layout_type>(ublas::to_array_v<outer_extents_type>);
 
-            ublas::for_each_fixture(self, [&a, &wa, &na, a_rank]<typename inner_extents_type>(auto /*id*/, inner_extents_type const& nb) {
+            ublas::for_each_fixture(self, [&a, &wa, &na]<typename inner_extents_type>(auto /*id*/, inner_extents_type const& nb) {
                 constexpr auto b_rank = ublas::size_v<inner_extents_type>;
                 constexpr auto bp = ublas::product_v<inner_extents_type>;
 

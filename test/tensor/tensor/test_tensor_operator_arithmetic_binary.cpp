@@ -29,7 +29,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_dynamic,
 {
     namespace ublas = boost::numeric::ublas;
     using value_type = typename TestTupleType::first_type;
-    using fixture_t = boost::numeric::ublas::tuple_fixture_tensor_dynamic<TestTupleType>;
+    using fixture_t = ublas::tuple_fixture_tensor_dynamic<TestTupleType>;
 
     constexpr auto check = [](auto /*id*/, auto t1){
         auto v = value_type{};
@@ -93,7 +93,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_static_rank,
 {
     namespace ublas = boost::numeric::ublas;
     using value_type = typename TestTupleType::first_type;
-    using fixture_t = boost::numeric::ublas::tuple_fixture_tensor_static_rank<TestTupleType>;
+    using fixture_t = ublas::tuple_fixture_tensor_static_rank<TestTupleType>;
 
     constexpr auto check = [](auto /*id*/, auto t1){
         auto v = value_type{};
@@ -157,7 +157,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_static,
 {
     namespace ublas = boost::numeric::ublas;
     using value_type = typename TestTupleType::first_type;
-    using fixture_t = boost::numeric::ublas::tuple_fixture_tensor_static<TestTupleType>;
+    using fixture_t = ublas::tuple_fixture_tensor_static<TestTupleType>;
 
     constexpr auto check = [](auto /*id*/, auto t1){
         auto v = value_type{};

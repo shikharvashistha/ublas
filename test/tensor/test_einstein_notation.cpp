@@ -172,7 +172,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_tensor_static_rank,
             for(auto i = 0u; i < AB.size(0); ++i){
                 auto e0   = B.size(0);
                 auto sum  = std::div(e0 * ( e0 + 1 ), 2);
-                auto quot = static_cast<value_type>(sum.quot);
+                auto quot = value_type{ static_cast<inner_type>(sum.quot) };
                 BOOST_CHECK_EQUAL( AB.at(i,j) , A.at(i,0)*quot );
             }
         }
@@ -288,7 +288,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_tensor_static_rank,
 //             for(auto i = 0u; i < AB.size(0); ++i){
 //                 auto e0   = B.size(0);
 //                 auto sum  = std::div(e0 * ( e0 + 1 ), 2);
-//                 auto quot = static_cast<value_type>(sum.quot);
+//                 auto quot = value_type{ static_cast<inner_type>(sum.quot) };
 //                 BOOST_CHECK_EQUAL( AB.at(i,j) , A.at(i,0)*quot );
 //             }
 //         }

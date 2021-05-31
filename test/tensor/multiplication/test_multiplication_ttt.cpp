@@ -19,7 +19,7 @@ BOOST_AUTO_TEST_SUITE(test_tensor_ttt,
     *boost::unit_test::description("Validate Tensor Times Tensor")
 )
 
-constexpr auto calculate_nc_base(auto& out, auto const& na, auto const& nb, std::size_t r, std::size_t s){
+constexpr auto calculate_nc_base(auto& out, auto const& na, auto const& nb, std::size_t r, std::size_t s) noexcept{
     using namespace boost::numeric::ublas;
     using namespace std;
     auto it = std::copy(begin(na), begin(na) + r, out.begin());
@@ -40,6 +40,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_dynamic,
     using layout_type = typename TestTupleType::second_type;
     using fixture_type = ublas::fixture_extents_dynamic<std::size_t>;
     using vector_t  = std::vector<value_type>;
+    using inner_t = inner_type_t<value_type>;
 
     auto const& self = static_cast<fixture_type const&>(*this);
 
@@ -89,7 +90,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_dynamic,
                 for(auto i = r; i < pa; ++i)
                     acc *= na[i];
 
-                auto v = value_type(acc)*a[0]*b[0];
+                auto v = value_type{ static_cast<inner_t>(acc) }*a[0]*b[0];
 
                 BOOST_CHECK( std::all_of(c.begin(),c.end(), [v](auto cc){return cc == v; } ) );
 
@@ -112,6 +113,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
     using layout_type = typename TestTupleType::second_type;
     using fixture_type = ublas::fixture_extents_static_rank<std::size_t>;
     using vector_t  = std::vector<value_type>;
+    using inner_t = inner_type_t<value_type>;
 
     auto const& self = static_cast<fixture_type const&>(*this);
 
@@ -162,7 +164,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
                     for(auto i = r; i < pa; ++i)
                         acc *= na[i];
 
-                    auto v = value_type(acc)*a[0]*b[0];
+                    auto v = value_type{ static_cast<inner_t>(acc) }*a[0]*b[0];
 
                     BOOST_CHECK( std::all_of(c.begin(),c.end(), [v](auto cc){return cc == v; } ) );
                 });
@@ -178,20 +180,19 @@ constexpr auto compute_nc() noexcept{
     using value_type = typename E1::value_type;
     constexpr auto pc = r+s > std::size_t{0} ? std::max(std::size_t{r+s}, std::size_t{2}) : std::size_t{2};
     
-    constexpr auto helper1 = []{
-        std::array<value_type,pc> temp;
-        constexpr auto na = ublas::to_array_v<E1>;
-        constexpr auto nb = ublas::to_array_v<E2>;
-        std::fill(std::begin(temp), std::end(temp), value_type{1});
-        calculate_nc_base(temp, na, nb, r, s);
-        return temp;
-    };
-
-    constexpr auto helper2 = [helper1]<std::size_t... Is>(std::index_sequence<Is...>){
+    constexpr auto helper = []<std::size_t... Is>(std::index_sequence<Is...>){
+        constexpr auto helper1 = []{
+            std::array<value_type,pc> temp;
+            constexpr auto na = ublas::to_array_v<E1>;
+            constexpr auto nb = ublas::to_array_v<E2>;
+            std::fill(std::begin(temp), std::end(temp), value_type{1});
+            calculate_nc_base(temp, na, nb, r, s);
+            return temp;
+        };
         constexpr auto arr = helper1();
         return ublas::extents_core<value_type, arr[Is]...>{};
     };
-    return helper2(std::make_index_sequence<pc>{});
+    return helper(std::make_index_sequence<pc>{});
 }
 
 // FIXME: temp fix to the invalid computation of static strides,
@@ -217,6 +218,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
     using value_type = typename TestTupleType::first_type;
     using layout_type = typename TestTupleType::second_type;
     using fixture_type = ublas::fixture_extents_static<std::size_t>;
+    using inner_t = inner_type_t<value_type>;
 
     auto const& self = static_cast<fixture_type const&>(*this);
 
@@ -269,7 +271,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
                     for(auto i = r; i < pa; ++i)
                         acc *= na[i];
 
-                    auto v = value_type(acc)*a[0]*b[0];
+                    auto v = value_type{ static_cast<inner_t>(acc) }*a[0]*b[0];
 
                     BOOST_CHECK( std::all_of(c.begin(),c.end(), [v](auto cc){return cc == v; } ) );
                 });
