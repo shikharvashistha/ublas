@@ -20,27 +20,6 @@ BOOST_AUTO_TEST_SUITE(test_multiplication_outer,
     *boost::unit_test::description("Validate Outer Product")
 )
 
-template<typename E>
-    requires boost::numeric::ublas::is_extents_v<E>
-std::string to_string(E const& e) {
-    namespace ublas = boost::numeric::ublas;
-    std::stringstream ss;
-    ss << "[ ";
-    std::copy(ublas::begin(e), ublas::end(e) - 1, std::ostream_iterator<typename E::value_type>(ss, ", "));
-    ss << ublas::back(e) << " ]";
-    return ss.str();
-}
-
-template<typename C>
-std::string to_string(C const& e) {
-    using value_type = typename C::value_type;
-    std::stringstream ss;
-    ss << "[ ";
-    std::copy(std::begin(e), std::end(e) - 1, std::ostream_iterator<value_type>(ss, ", "));
-    ss << e.back() << " ]";
-    return ss.str();
-}
-
 BOOST_TEST_DECORATOR(
     *boost::unit_test::label("inner_product")
     *boost::unit_test::description("Testing outer product for dynamic tensor")
@@ -131,7 +110,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
             auto a = vector_t(ap, value_type{2});
             auto wa = ublas::to_strides(na,layout_type{});
 
-            ublas::for_each_fixture(self, [&]<typename inner_extents_type>(auto /*id*/, inner_extents_type const& nb) {
+            ublas::for_each_fixture(self, [&a, &wa, &na, a_rank]<typename inner_extents_type>(auto /*id*/, inner_extents_type const& nb) {
                 constexpr auto b_rank = std::tuple_size_v<inner_extents_type>;
                 auto const bp = ublas::product(nb);
 
@@ -205,7 +184,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
 
             auto wa = get_strides<layout_type>(ublas::to_array_v<outer_extents_type>);
 
-            ublas::for_each_fixture(self, [&]<typename inner_extents_type>(auto /*id*/, inner_extents_type const& nb) {
+            ublas::for_each_fixture(self, [&a, &wa, &na, a_rank]<typename inner_extents_type>(auto /*id*/, inner_extents_type const& nb) {
                 constexpr auto b_rank = ublas::size_v<inner_extents_type>;
                 constexpr auto bp = ublas::product_v<inner_extents_type>;
 

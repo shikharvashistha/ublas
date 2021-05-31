@@ -319,13 +319,30 @@ namespace boost::numeric::ublas{
     template<typename TupleType>
     using tuple_fixture_tensor_static = fixture_tensor_static<typename TupleType::first_type, typename TupleType::second_type>;
 
-    template<typename FixtureType, typename FnType>
+    namespace detail{
+        template<typename T>
+        struct is_tuple : std::false_type{};
+        
+        template<typename... Ts>
+        struct is_tuple< std::tuple<Ts...> > : std::true_type{};
+
+        template<typename T>
+        inline static constexpr auto is_tuple_v = is_tuple< std::decay_t<T> >::value;
+
+        template<typename T>
+        concept HasTuple = requires{
+            typename std::decay_t<T>::tuple_type;
+            requires is_tuple_v< typename std::decay_t<T>::tuple_type >;
+        };
+        
+    }
+
+    template<detail::HasTuple FixtureType, typename FnType>
     constexpr auto for_each_fixture(FixtureType&& fixture, FnType&& fn){
         for_each_in_tuple(fixture.collection, std::forward<FnType>(fn));
     }
 
     template<integral ExtentsType, typename FnType>
-        requires std::is_invocable_v<FnType, std::size_t, extents_core<ExtentsType>>
     constexpr auto for_each_fixture(fixture_extents_dynamic<ExtentsType> const& fixture, FnType&& fn){
         std::size_t i{};
         for(auto const& el : fixture.collection){
@@ -335,7 +352,6 @@ namespace boost::numeric::ublas{
     }
 
     template<typename V, typename L, typename FnType>
-        requires std::is_invocable_v<FnType, std::size_t, typename fixture_tensor_dynamic<V,L>::tensor_type>
     constexpr auto for_each_fixture(fixture_tensor_dynamic<V,L> const& fixture, FnType&& fn){
         std::size_t i{};
         for(auto const& el : fixture.collection){

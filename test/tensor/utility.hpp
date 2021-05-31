@@ -62,14 +62,9 @@ constexpr auto static_for_each(FnType&& fn) noexcept{
 template<class UnaryOp, class ... Elements>
 constexpr void for_each_in_tuple(std::tuple<Elements...> const& tuple, UnaryOp&& op)
 {
-  using tuple_type = std::tuple<Elements...>;
   auto invoke_op_for_tuple = [&tuple, op = std::forward<UnaryOp>(op)]<typename IType>(IType id) {
     constexpr auto i = IType::value;
-    if constexpr(std::is_invocable_v<UnaryOp, IType, std::tuple_element_t<i,tuple_type>>){
-      std::invoke(op, id, std::get<i>(tuple));
-    }else{
-      std::invoke(op, i, std::get<i>(tuple));
-    }
+    std::invoke(op, id, std::get<i>(tuple));
   };
 
   static_for_each<sizeof...(Elements)>(std::move(invoke_op_for_tuple));
@@ -126,7 +121,7 @@ namespace boost::numeric::ublas{
   // because the complex number does not support increment operator(++)
   template<typename ValueType>
   constexpr auto iota(auto& c, ValueType v) noexcept{
-      std::generate(std::begin(c), std::end(c), [v = v]() mutable{
+      std::generate(c.begin(), c.end(), [v = v]() mutable{
           auto prev = v;
           v += ValueType(1);
           return prev;

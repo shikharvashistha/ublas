@@ -150,7 +150,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
                 std::fill(a.begin(), a.end(), value_type{2});
                 auto wa = ublas::to_strides_v<extents_type,layout_type>;
                 
-                static_for_each<rank>([&]<typename IType>(IType /*id*/){
+                static_for_each<rank>([&a, &wa, na]<typename IType>(IType /*id*/){
                     constexpr auto m = IType::value;
 
                     using nb_type = ublas::extents_core<extents_value_type, na[m], na[m] >;

@@ -191,7 +191,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
                     constexpr auto pb = std::tuple_size_v<decltype(nb)>;
 
                     // the number of contractions is changed.
-                    static_for_each<pa>([&]<typename IType>(IType /*id*/){
+                    static_for_each<pa>([&a, &pia, &pib_inv, &nb, &wb, &b, &na, &wa, one, two, pa, pb]<typename IType>(IType /*id*/){
                         constexpr auto q = IType::value;
                         constexpr auto r  = pa - q;
                         constexpr auto s  = pb - q;

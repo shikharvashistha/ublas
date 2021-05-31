@@ -47,7 +47,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_dynamic,
         auto a = vector_t(p, value_type{2});
         auto wa = ublas::to_strides(na, layout_type{});
 
-        for(auto m = 0ul; m < rank; ++m){
+        for(std::size_t m = 0ul; m < rank; ++m){
             BOOST_TEST_CONTEXT("[MTV Dynamic Tensor] testing for m(" << m << ") and n(" << p << ")"){
                 auto nb = extents_type {na[m], std::size_t{1}};
                 auto b  = vector_t(ublas::product(nb), value_type{1} );
@@ -103,7 +103,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
             auto a = vector_t(p, value_type{2});
             auto wa = ublas::to_strides(na, layout_type{});
 
-            for(auto m = 0ul; m < rank; ++m){
+            for(std::size_t m = 0ul; m < rank; ++m){
                 BOOST_TEST_CONTEXT("[MTV Static Rank Tensor] testing for m(" << m << ") and n(" << p << ")"){
                     auto nb = extents_type {na[m], std::size_t{1}};
                     auto b  = vector_t(ublas::product(nb), value_type{1} );
@@ -185,7 +185,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
     ublas::for_each_fixture(self, []<typename extents_type>(auto /*id*/, extents_type const& /*na*/){
         using extents_value_type = typename extents_type::value_type;
         constexpr auto rank = ublas::size_v<extents_type>;
-        constexpr auto const p = ublas::product_v<extents_type>;
+        constexpr auto p = ublas::product_v<extents_type>;
 
         if constexpr (rank == 2ul){
             constexpr auto na = ublas::to_array_v<extents_type>;
@@ -195,8 +195,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
             // FIXME: use strides_v after the fix
             auto wa = get_strides<layout_type>(na);
 
-            static_for_each<rank>([&]<typename IType>(IType /*id*/){
-                constexpr auto m = IType::value;
+            static_for_each<rank>([&wa, &a, p, rank, na]<typename IType>(IType /*id*/){
+                constexpr std::size_t m = IType::value;
                 BOOST_TEST_CONTEXT("[MTV Static Tensor] testing for m(" << m << ") and n(" << p << ")"){
                     using nb_type = ublas::extents_core<extents_value_type, ublas::get_v<extents_type,m>, 1ul >;
                     auto b  = std::array<value_type, ublas::product_v<nb_type> >{};

@@ -218,18 +218,18 @@ constexpr auto generate_permuated_extents() noexcept{
     using value_type = typename E::value_type;
     constexpr auto sz = ublas::size_v<E>;
 
-    constexpr auto helper1 = []<std::size_t... Is>(std::index_sequence<Is...>){
-        constexpr auto rank = sizeof...(Is);
-        std::array<std::size_t,rank> pi;
-        (( pi[rank - Is - 1ul] = ublas::get_v<E,Is> ),...);
-        return pi;
-    };
     
-    constexpr auto helper2 = [helper1]<std::size_t... Is>(std::index_sequence<Is...> ids){
-        constexpr auto arr = helper1(ids);
+    constexpr auto helper = []<std::size_t... Is>(std::index_sequence<Is...> ids){
+        constexpr auto helper1 = [](){
+            std::array<std::size_t,sz> pi;
+            (( pi[sz - Is - 1ul] = ublas::get_v<E,Is> ),...);
+            return pi;
+        };
+        constexpr auto arr = helper1();
         return ublas::extents_core<value_type,arr[Is]...>{};
     };
-    return helper2(std::make_index_sequence<sz>{});
+    
+    return helper(std::make_index_sequence<sz>{});
 }
 
 BOOST_TEST_DECORATOR(
