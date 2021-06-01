@@ -347,89 +347,91 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
             constexpr auto rank = ublas::size_v<extents_type>;
             
             // TODO: Enable test for the rank one and the rank two after the issue #119 has been fixed
-            if constexpr(rank <= 2ul) return;
+            if constexpr(rank > 2ul){
 
-            BOOST_TEST_CONTEXT("[Copy Algorithm] rank("<< rank <<") static extents"){
-                auto a = vector_t(ublas::product_v<extents_type>);
-                auto b = vector_t(ublas::product_v<extents_type>);
-                auto c = vector_t(ublas::product_v<extents_type>);
+                BOOST_TEST_CONTEXT("[Copy Algorithm] rank("<< rank <<") static extents"){
+                    auto a = vector_t(ublas::product_v<extents_type>);
+                    auto b = vector_t(ublas::product_v<extents_type>);
+                    auto c = vector_t(ublas::product_v<extents_type>);
 
-                auto wa = ublas::to_strides_v<extents_type, first_order_t>;
-                auto wb = ublas::to_strides_v<extents_type, last_order_t>;
-                auto wc = ublas::to_strides_v<extents_type, first_order_t>;
+                    auto wa = ublas::to_strides_v<extents_type, first_order_t>;
+                    auto wb = ublas::to_strides_v<extents_type, last_order_t>;
+                    auto wc = ublas::to_strides_v<extents_type, first_order_t>;
 
-                ublas::iota(a, value_type{});
+                    ublas::iota(a, value_type{});
 
-                ublas::copy( rank, n.data(), b.data(), wb.data(), a.data(), wa.data() );
-                ublas::copy( rank, n.data(), c.data(), wc.data(), b.data(), wb.data() );
+                    ublas::copy( rank, n.data(), b.data(), wb.data(), a.data(), wa.data() );
+                    ublas::copy( rank, n.data(), c.data(), wc.data(), b.data(), wb.data() );
 
-                BOOST_CHECK_EQUAL_COLLECTIONS(std::begin(c), std::end(c), std::begin(a), std::end(a));
-                check(b, wb, a, wa, n);
+                    BOOST_CHECK_EQUAL_COLLECTIONS(std::begin(c), std::end(c), std::begin(a), std::end(a));
+                    check(b, wb, a, wa, n);
+                }
+
+                BOOST_TEST_CONTEXT("[Copy Algorithm(Exception)] rank("<< rank <<") static extents"){
+                    {
+                        BOOST_TEST_CHECKPOINT("if input is null");
+                        value_type* a  = nullptr;
+                        auto c  = vector_t(ublas::product_v<extents_type>);
+
+                        auto const wa = ublas::to_strides_v<extents_type, first_order_t>;
+                        auto const wc = ublas::to_strides_v<extents_type, first_order_t>;
+
+                        BOOST_REQUIRE_THROW( ublas::copy( rank, n.data(), c.data(), wc.data(), a, wa.data() ), std::runtime_error );
+                    }
+                    {
+                        BOOST_TEST_CHECKPOINT("if input and output are null");
+                        value_type* a  = nullptr;
+                        value_type* c  = nullptr;
+                        
+                        auto const wa = ublas::to_strides_v<extents_type, first_order_t>;
+                        auto const wc = ublas::to_strides_v<extents_type, first_order_t>;
+
+                        BOOST_REQUIRE_THROW( ublas::copy( rank, n.data(), c, wc.data(), a, wa.data() ), std::runtime_error );
+                    }
+                    {
+                        BOOST_TEST_CHECKPOINT("if output is null");
+                        auto a  = vector_t(ublas::product_v<extents_type>);
+                        value_type* c  = nullptr;
+                        
+                        auto const wa = ublas::to_strides_v<extents_type, first_order_t>;
+                        auto const wc = ublas::to_strides_v<extents_type, first_order_t>;
+
+                        BOOST_REQUIRE_THROW( ublas::copy( rank, n.data(), c, wc.data(), a.data(), wa.data() ), std::runtime_error );
+                    }
+                    {
+                        BOOST_TEST_CHECKPOINT("if input stride is null");
+                        auto a  = vector_t(ublas::product_v<extents_type>);
+                        auto c  = vector_t(ublas::product_v<extents_type>);
+
+                        std::size_t const* wa = nullptr;
+                        auto const wc = ublas::to_strides_v<extents_type, first_order_t>;
+
+                        BOOST_REQUIRE_THROW( ublas::copy( rank, n.data(), c.data(), wc.data(), a.data(), wa ), std::runtime_error );
+                    }
+                    {
+                        BOOST_TEST_CHECKPOINT("if output stride is null");
+                        auto a  = vector_t(ublas::product_v<extents_type>);
+                        auto c  = vector_t(ublas::product_v<extents_type>);
+
+                        std::size_t const* wc = nullptr;
+                        auto const wa = ublas::to_strides_v<extents_type, first_order_t>;
+
+                        BOOST_REQUIRE_THROW( ublas::copy( rank, n.data(), c.data(), wc, a.data(), wa.data() ), std::runtime_error );
+                    }
+                    {
+                        BOOST_TEST_CHECKPOINT("if extents pointer is null");
+                        auto a  = vector_t(ublas::product_v<extents_type>);
+                        auto c  = vector_t(ublas::product_v<extents_type>);
+
+                        std::size_t const* m = nullptr;
+                        auto const wa = ublas::to_strides_v<extents_type, first_order_t>;
+                        auto const wc = ublas::to_strides_v<extents_type, first_order_t>;
+
+                        BOOST_REQUIRE_THROW( ublas::copy( rank, m, c.data(), wc.data(), a.data(), wa.data() ), std::runtime_error );
+                    }
+                }
             }
 
-            BOOST_TEST_CONTEXT("[Copy Algorithm(Exception)] rank("<< rank <<") static extents"){
-                {
-                    BOOST_TEST_CHECKPOINT("if input is null");
-                    value_type* a  = nullptr;
-                    auto c  = vector_t(ublas::product_v<extents_type>);
-
-                    auto const wa = ublas::to_strides_v<extents_type, first_order_t>;
-                    auto const wc = ublas::to_strides_v<extents_type, first_order_t>;
-
-                    BOOST_REQUIRE_THROW( ublas::copy( rank, n.data(), c.data(), wc.data(), a, wa.data() ), std::runtime_error );
-                }
-                {
-                    BOOST_TEST_CHECKPOINT("if input and output are null");
-                    value_type* a  = nullptr;
-                    value_type* c  = nullptr;
-                    
-                    auto const wa = ublas::to_strides_v<extents_type, first_order_t>;
-                    auto const wc = ublas::to_strides_v<extents_type, first_order_t>;
-
-                    BOOST_REQUIRE_THROW( ublas::copy( rank, n.data(), c, wc.data(), a, wa.data() ), std::runtime_error );
-                }
-                {
-                    BOOST_TEST_CHECKPOINT("if output is null");
-                    auto a  = vector_t(ublas::product_v<extents_type>);
-                    value_type* c  = nullptr;
-                    
-                    auto const wa = ublas::to_strides_v<extents_type, first_order_t>;
-                    auto const wc = ublas::to_strides_v<extents_type, first_order_t>;
-
-                    BOOST_REQUIRE_THROW( ublas::copy( rank, n.data(), c, wc.data(), a.data(), wa.data() ), std::runtime_error );
-                }
-                {
-                    BOOST_TEST_CHECKPOINT("if input stride is null");
-                    auto a  = vector_t(ublas::product_v<extents_type>);
-                    auto c  = vector_t(ublas::product_v<extents_type>);
-
-                    std::size_t const* wa = nullptr;
-                    auto const wc = ublas::to_strides_v<extents_type, first_order_t>;
-
-                    BOOST_REQUIRE_THROW( ublas::copy( rank, n.data(), c.data(), wc.data(), a.data(), wa ), std::runtime_error );
-                }
-                {
-                    BOOST_TEST_CHECKPOINT("if output stride is null");
-                    auto a  = vector_t(ublas::product_v<extents_type>);
-                    auto c  = vector_t(ublas::product_v<extents_type>);
-
-                    std::size_t const* wc = nullptr;
-                    auto const wa = ublas::to_strides_v<extents_type, first_order_t>;
-
-                    BOOST_REQUIRE_THROW( ublas::copy( rank, n.data(), c.data(), wc, a.data(), wa.data() ), std::runtime_error );
-                }
-                {
-                    BOOST_TEST_CHECKPOINT("if extents pointer is null");
-                    auto a  = vector_t(ublas::product_v<extents_type>);
-                    auto c  = vector_t(ublas::product_v<extents_type>);
-
-                    std::size_t const* m = nullptr;
-                    auto const wa = ublas::to_strides_v<extents_type, first_order_t>;
-                    auto const wc = ublas::to_strides_v<extents_type, first_order_t>;
-
-                    BOOST_REQUIRE_THROW( ublas::copy( rank, m, c.data(), wc.data(), a.data(), wa.data() ), std::runtime_error );
-                }
-            }
         }
 
     });

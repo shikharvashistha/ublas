@@ -120,6 +120,15 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static_rank,
     });
 }
 
+// FIXME: temp fix to the invalid computation of static strides,
+// rempve this after the fix
+template<typename L, typename T, std::size_t N>
+constexpr auto get_strides(std::array<T,N> const& temp) noexcept{
+    namespace ublas = boost::numeric::ublas;
+    using extents_type = ublas::extents_core<T,N>;
+    auto n = extents_type{temp};
+    return ublas::to_strides(n, L{});
+}
 
 BOOST_TEST_DECORATOR(
     *boost::unit_test::label("mtm")
@@ -150,17 +159,17 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
             BOOST_TEST_CONTEXT("[MTM Static Rank Tensor] testing for m(" << na[0] << "), n(" << na[1] <<"), k(" << na[1] <<")"){
                 auto a  = std::array<value_type, p>();
                 std::fill(a.begin(), a.end(), value_type{2});
-                auto wa = ublas::to_strides_v<extents_type,layout_type>;
+                auto wa = get_strides<layout_type>(na);
 
                 using nb_type = ublas::extents_core<extents_value_type, ublas::get_v<extents_type, 1ul>, ublas::get_v<extents_type, 0ul> >;
                 auto nb = ublas::to_array_v<nb_type>;
-                auto wb = ublas::to_strides_v<nb_type,layout_type>;
+                auto wb = get_strides<layout_type>(nb);
                 auto b  = std::array<value_type, ublas::product_v<nb_type>>();
                 std::fill(b.begin(), b.end(), value_type{1});
 
                 using nc_type = ublas::extents_core<extents_value_type, ublas::get_v<extents_type, 0ul>, ublas::get_v<nb_type, 1ul> >;
                 auto nc = ublas::to_array_v<nc_type>;
-                auto wc = ublas::to_strides_v<nc_type,layout_type>;;
+                auto wc = get_strides<layout_type>(nc);
                 auto c  = std::array<value_type, ublas::product_v<nc_type>>();
 
                 ublas::detail::recursive::mtm(

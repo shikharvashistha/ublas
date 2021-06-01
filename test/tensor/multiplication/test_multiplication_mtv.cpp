@@ -191,7 +191,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
         static constexpr auto p = ublas::product_v<extents_type>;
 
         if constexpr (rank == 2ul){
-            static constexpr auto na = ublas::to_array_v<extents_type>;
+            auto na = ublas::to_array_v<extents_type>;
 
             auto a = std::array<value_type,p>();
             std::fill(std::begin(a), std::end(a), value_type{2});
@@ -199,9 +199,11 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
             auto wa = get_strides<layout_type>(na);
 
             static_for_each<rank>([&wa, &a]<typename IType>(IType /*id*/){
+                constexpr auto na = ublas::to_array_v<extents_type>;
                 constexpr std::size_t m = IType::value;
+
                 BOOST_TEST_CONTEXT("[MTV Static Tensor] testing for m(" << m << ") and n(" << p << ")"){
-                    using nb_type = ublas::extents_core<extents_value_type, ublas::get_v<extents_type,m>, 1ul >;
+                    using nb_type = ublas::extents_core<extents_value_type, na[m], 1ul >;
                     auto b  = std::array<value_type, ublas::product_v<nb_type> >{};
                     std::fill(std::begin(b), std::end(b), value_type{1});
 

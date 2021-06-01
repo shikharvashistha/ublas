@@ -373,94 +373,96 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
             constexpr auto rank = ublas::size_v<extents_type>;
             
             // TODO: Enable test for the rank one and the rank two after the issue #119 has been fixed
-            if constexpr(rank <= 2ul) return;
+            if constexpr(rank > 2ul){
 
-            BOOST_TEST_CONTEXT("[Transform Algorithm] rank("<< rank <<") static extents"){
-                auto a = vector_t(ublas::product_v<extents_type>);
-                auto b = vector_t(ublas::product_v<extents_type>);
-                auto c = vector_t(ublas::product_v<extents_type>);
+                BOOST_TEST_CONTEXT("[Transform Algorithm] rank("<< rank <<") static extents"){
+                    auto a = vector_t(ublas::product_v<extents_type>);
+                    auto b = vector_t(ublas::product_v<extents_type>);
+                    auto c = vector_t(ublas::product_v<extents_type>);
 
-                auto wa = ublas::to_strides_v<extents_type, first_order_t>;
-                auto wb = ublas::to_strides_v<extents_type, last_order_t>;
-                auto wc = ublas::to_strides_v<extents_type, first_order_t>;
+                    auto wa = ublas::to_strides_v<extents_type, first_order_t>;
+                    auto wb = ublas::to_strides_v<extents_type, last_order_t>;
+                    auto wc = ublas::to_strides_v<extents_type, first_order_t>;
 
-                ublas::iota(a, value_type{});
+                    ublas::iota(a, value_type{});
 
-                ublas::transform( ublas::size(n), n.data(), b.data(), wb.data(), a.data(), wa.data(), add_one );
-                ublas::transform( ublas::size(n), n.data(), c.data(), wc.data(), b.data(), wb.data(), sub_one );
+                    ublas::transform( ublas::size(n), n.data(), b.data(), wb.data(), a.data(), wa.data(), add_one );
+                    ublas::transform( ublas::size(n), n.data(), c.data(), wc.data(), b.data(), wb.data(), sub_one );
 
-                check(b, wb, a, wa, n, [](auto const& l, auto const& r){ return l == (r + value_type{1}); });
-                check(c, wc, b, wb, n, [](auto const& l, auto const& r){ return l == (r - value_type{1}); });
+                    check(b, wb, a, wa, n, [](auto const& l, auto const& r){ return l == (r + value_type{1}); });
+                    check(c, wc, b, wb, n, [](auto const& l, auto const& r){ return l == (r - value_type{1}); });
 
-                auto zero = std::size_t{0};
-                ublas::transform(zero, n.data(), c.data(), wc.data(), b.data(), wb.data(), add_one );
+                    auto zero = std::size_t{0};
+                    ublas::transform(zero, n.data(), c.data(), wc.data(), b.data(), wb.data(), add_one );
 
-                BOOST_CHECK_EQUAL_COLLECTIONS(std::begin(c), std::end(c), std::begin(a), std::end(a));
+                    BOOST_CHECK_EQUAL_COLLECTIONS(std::begin(c), std::end(c), std::begin(a), std::end(a));
+                }
+
+                BOOST_TEST_CONTEXT("[Transform Algorithm(Exception)] rank("<< rank <<") static extents"){
+                    {
+                        BOOST_TEST_CHECKPOINT("if input is null");
+                        value_type* a  = nullptr;
+                        auto c  = vector_t(ublas::product_v<extents_type>);
+
+                        auto wa = ublas::to_strides_v<extents_type, first_order_t>;
+                        auto wc = ublas::to_strides_v<extents_type, first_order_t>;
+
+                        BOOST_REQUIRE_THROW( ublas::transform( rank, n.data(), c.data(), wc.data(), a, wa.data(), add_one ), std::runtime_error );
+                    }
+                    {
+                        BOOST_TEST_CHECKPOINT("if input and output is null");
+                        value_type* a  = nullptr;
+                        value_type* c  = nullptr;
+
+                        auto wa = ublas::to_strides_v<extents_type, first_order_t>;
+                        auto wc = ublas::to_strides_v<extents_type, first_order_t>;
+
+                        BOOST_REQUIRE_THROW( ublas::transform( rank, n.data(), c, wc.data(), a, wa.data(), add_one), std::runtime_error );
+                    }
+                    {
+                        BOOST_TEST_CHECKPOINT("if output is null");
+                        auto a  = vector_t(ublas::product_v<extents_type>);
+                        value_type* c  = nullptr;
+
+                        auto wa = ublas::to_strides_v<extents_type, first_order_t>;
+                        auto wc = ublas::to_strides_v<extents_type, first_order_t>;
+
+                        BOOST_REQUIRE_THROW( ublas::transform( rank, n.data(), c, wc.data(), a.data(), wa.data(), add_one ), std::runtime_error );
+                    }
+                    {
+                        BOOST_TEST_CHECKPOINT("if input stride is null");
+                        auto a  = vector_t(ublas::product_v<extents_type>);
+                        auto c  = vector_t(ublas::product_v<extents_type>);
+
+                        std::size_t* wa = nullptr;
+                        auto wc = ublas::to_strides_v<extents_type, first_order_t>;
+
+                        BOOST_REQUIRE_THROW( ublas::transform( rank, n.data(), c.data(), wc.data(), a.data(), wa, add_one ), std::runtime_error );
+                    }
+                    {
+                        BOOST_TEST_CHECKPOINT("if input stride is null");
+                        auto a  = vector_t(ublas::product_v<extents_type>);
+                        auto c  = vector_t(ublas::product_v<extents_type>);
+
+                        std::size_t* wc = nullptr;
+                        auto wa = ublas::to_strides_v<extents_type, first_order_t>;
+
+                        BOOST_REQUIRE_THROW( ublas::transform( rank, n.data(), c.data(), wc, a.data(), wa.data(), add_one ), std::runtime_error );
+                    }
+                    {
+                        BOOST_TEST_CHECKPOINT("if extents is null");
+                        auto a  = vector_t(ublas::product_v<extents_type>);
+                        auto c  = vector_t(ublas::product_v<extents_type>);
+
+                        std::size_t* m = nullptr;
+                        auto wa = ublas::to_strides_v<extents_type, first_order_t>;
+                        auto wc = ublas::to_strides_v<extents_type, first_order_t>;
+
+                        BOOST_REQUIRE_THROW( ublas::transform( rank, m, c.data(), wc.data(), a.data(), wa.data(), add_one ), std::runtime_error );
+                    }
+                }
             }
 
-            BOOST_TEST_CONTEXT("[Transform Algorithm(Exception)] rank("<< rank <<") static extents"){
-                {
-                    BOOST_TEST_CHECKPOINT("if input is null");
-                    value_type* a  = nullptr;
-                    auto c  = vector_t(ublas::product_v<extents_type>);
-
-                    auto wa = ublas::to_strides_v<extents_type, first_order_t>;
-                    auto wc = ublas::to_strides_v<extents_type, first_order_t>;
-
-                    BOOST_REQUIRE_THROW( ublas::transform( rank, n.data(), c.data(), wc.data(), a, wa.data(), add_one ), std::runtime_error );
-                }
-                {
-                    BOOST_TEST_CHECKPOINT("if input and output is null");
-                    value_type* a  = nullptr;
-                    value_type* c  = nullptr;
-
-                    auto wa = ublas::to_strides_v<extents_type, first_order_t>;
-                    auto wc = ublas::to_strides_v<extents_type, first_order_t>;
-
-                    BOOST_REQUIRE_THROW( ublas::transform( rank, n.data(), c, wc.data(), a, wa.data(), add_one), std::runtime_error );
-                }
-                {
-                    BOOST_TEST_CHECKPOINT("if output is null");
-                    auto a  = vector_t(ublas::product_v<extents_type>);
-                    value_type* c  = nullptr;
-
-                    auto wa = ublas::to_strides_v<extents_type, first_order_t>;
-                    auto wc = ublas::to_strides_v<extents_type, first_order_t>;
-
-                    BOOST_REQUIRE_THROW( ublas::transform( rank, n.data(), c, wc.data(), a.data(), wa.data(), add_one ), std::runtime_error );
-                }
-                {
-                    BOOST_TEST_CHECKPOINT("if input stride is null");
-                    auto a  = vector_t(ublas::product_v<extents_type>);
-                    auto c  = vector_t(ublas::product_v<extents_type>);
-
-                    std::size_t* wa = nullptr;
-                    auto wc = ublas::to_strides_v<extents_type, first_order_t>;
-
-                    BOOST_REQUIRE_THROW( ublas::transform( rank, n.data(), c.data(), wc.data(), a.data(), wa, add_one ), std::runtime_error );
-                }
-                {
-                    BOOST_TEST_CHECKPOINT("if input stride is null");
-                    auto a  = vector_t(ublas::product_v<extents_type>);
-                    auto c  = vector_t(ublas::product_v<extents_type>);
-
-                    std::size_t* wc = nullptr;
-                    auto wa = ublas::to_strides_v<extents_type, first_order_t>;
-
-                    BOOST_REQUIRE_THROW( ublas::transform( rank, n.data(), c.data(), wc, a.data(), wa.data(), add_one ), std::runtime_error );
-                }
-                {
-                    BOOST_TEST_CHECKPOINT("if extents is null");
-                    auto a  = vector_t(ublas::product_v<extents_type>);
-                    auto c  = vector_t(ublas::product_v<extents_type>);
-
-                    std::size_t* m = nullptr;
-                    auto wa = ublas::to_strides_v<extents_type, first_order_t>;
-                    auto wc = ublas::to_strides_v<extents_type, first_order_t>;
-
-                    BOOST_REQUIRE_THROW( ublas::transform( rank, m, c.data(), wc.data(), a.data(), wa.data(), add_one ), std::runtime_error );
-                }
-            }
         }
 
     });

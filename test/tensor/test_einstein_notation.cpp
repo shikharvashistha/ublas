@@ -100,7 +100,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_tensor_dynamic,
 
     BOOST_TEST_CONTEXT("[Dynamic Tensor Einstien Notation] tensor with LHS[4, 3] : RHS[3, 4, 2]"){
         
-        auto A = tensor_t{{4,3}};
+        auto A = tensor_t{4,3};
         auto B = tensor_t{3,4,2};
 
         for(auto j = 0u; j < A.size(1); ++j){

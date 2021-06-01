@@ -214,57 +214,59 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
 
             
             // TODO: Enable test for the rank one and the rank two after the issue #119 has been fixed
-            if constexpr(rank <= 2ul) return;
+            if constexpr(rank > 2ul){
 
-            BOOST_TEST_CONTEXT("[Accumulate Algorithm] rank("<< rank <<") static extents"){
-                auto a = vector_t(s);
+                BOOST_TEST_CONTEXT("[Accumulate Algorithm] rank("<< rank <<") static extents"){
+                    auto a = vector_t(s);
 
-                auto wa = ublas::to_strides_v<extents_type, layout_type>;
+                    auto wa = ublas::to_strides_v<extents_type, layout_type>;
 
-                ublas::iota(a, one);
+                    ublas::iota(a, one);
 
-                auto const acc = ublas::accumulate( rank, n.data(), a.data(), wa.data(), v);
+                    auto const acc = ublas::accumulate( rank, n.data(), a.data(), wa.data(), v);
 
-                auto const sum = value_type{ static_cast<inner_t>( (s * (s + one)) / two ) };
+                    auto const sum = value_type{ static_cast<inner_t>( (s * (s + one)) / two ) };
 
-                BOOST_CHECK_EQUAL( acc, sum );
+                    BOOST_CHECK_EQUAL( acc, sum );
 
-                auto zero = std::size_t{0};
-                BOOST_CHECK_EQUAL( ublas::accumulate(zero, n.data(), a.data(), wa.data(),v), v );
+                    auto zero = std::size_t{0};
+                    BOOST_CHECK_EQUAL( ublas::accumulate(zero, n.data(), a.data(), wa.data(),v), v );
 
-                auto acc2 = ublas::accumulate( rank, n.data(), a.data(), wa.data(), v, std::plus<>{});
+                    auto acc2 = ublas::accumulate( rank, n.data(), a.data(), wa.data(), v, std::plus<>{});
 
-                BOOST_CHECK_EQUAL( acc2, sum );
+                    BOOST_CHECK_EQUAL( acc2, sum );
 
-                BOOST_CHECK_EQUAL( ublas::accumulate(zero, n.data(), a.data(), wa.data(), v, std::plus<>{}), v );
+                    BOOST_CHECK_EQUAL( ublas::accumulate(zero, n.data(), a.data(), wa.data(), v, std::plus<>{}), v );
+                }
+
+                BOOST_TEST_CONTEXT("[Accumulate Algorithm(Exception)] rank("<< rank <<") static extents"){
+                    {
+                        BOOST_TEST_CHECKPOINT("if input is null");
+                        value_type* a  = nullptr;
+                        auto const wa = ublas::to_strides_v<extents_type, layout_type>;
+                        BOOST_REQUIRE_THROW( (void)ublas::accumulate( rank, n.data(), a, wa.data(), v ), std::runtime_error );
+                    }
+                    {
+                        BOOST_TEST_CHECKPOINT("if input is null and with predicate");
+                        value_type* a  = nullptr;
+                        auto const wa = ublas::to_strides_v<extents_type, layout_type>;
+                        BOOST_REQUIRE_THROW( (void)ublas::accumulate( rank, n.data(), a, wa.data(), v, std::plus<>{} ), std::runtime_error );
+                    }
+                    {
+                        BOOST_TEST_CHECKPOINT("if stride is null");
+                        auto const a = vector_t(s);
+                        std::size_t const* wa = nullptr;
+                        BOOST_REQUIRE_THROW( (void)ublas::accumulate( rank, n.data(), a.data(), wa, v ), std::runtime_error );
+                    }
+                    {
+                        BOOST_TEST_CHECKPOINT("if stride is null and predicate");
+                        auto const a = vector_t(s);
+                        std::size_t const* wa = nullptr;
+                        BOOST_REQUIRE_THROW( (void)ublas::accumulate( rank, n.data(), a.data(), wa, v, std::plus<>{} ), std::runtime_error );
+                    }
+                }
             }
 
-            BOOST_TEST_CONTEXT("[Accumulate Algorithm(Exception)] rank("<< rank <<") static extents"){
-                {
-                    BOOST_TEST_CHECKPOINT("if input is null");
-                    value_type* a  = nullptr;
-                    auto const wa = ublas::to_strides_v<extents_type, layout_type>;
-                    BOOST_REQUIRE_THROW( (void)ublas::accumulate( rank, n.data(), a, wa.data(), v ), std::runtime_error );
-                }
-                {
-                    BOOST_TEST_CHECKPOINT("if input is null and with predicate");
-                    value_type* a  = nullptr;
-                    auto const wa = ublas::to_strides_v<extents_type, layout_type>;
-                    BOOST_REQUIRE_THROW( (void)ublas::accumulate( rank, n.data(), a, wa.data(), v, std::plus<>{} ), std::runtime_error );
-                }
-                {
-                    BOOST_TEST_CHECKPOINT("if stride is null");
-                    auto const a = vector_t(s);
-                    std::size_t const* wa = nullptr;
-                    BOOST_REQUIRE_THROW( (void)ublas::accumulate( rank, n.data(), a.data(), wa, v ), std::runtime_error );
-                }
-                {
-                    BOOST_TEST_CHECKPOINT("if stride is null and predicate");
-                    auto const a = vector_t(s);
-                    std::size_t const* wa = nullptr;
-                    BOOST_REQUIRE_THROW( (void)ublas::accumulate( rank, n.data(), a.data(), wa, v, std::plus<>{} ), std::runtime_error );
-                }
-            }
         }
 
     });

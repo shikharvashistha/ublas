@@ -186,17 +186,20 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_extents_static,
         static constexpr auto p = ublas::product_v<extents_type>;
 
         if constexpr (rank > 0ul){
-            static constexpr auto na = ublas::to_array_v<extents_type>;
 
             BOOST_TEST_CONTEXT("[TTV Static Tensor] testing for rank(" << rank << ")"){
                 
+                auto na = ublas::to_array_v<extents_type>;
                 auto a = std::array<value_type,p>();
                 std::fill(std::begin(a), std::end(a), value_type{2});
                 // FIXME: use strides_v after the fix
                 auto wa = get_strides<layout_type>(na);
 
                 static_for_each<rank>([&a, &wa]<typename IType>(IType /*id*/){
+                    
+                    constexpr auto na = ublas::to_array_v<extents_type>;
                     constexpr auto m = IType::value;
+
                     using nb_type = ublas::extents_core<extents_value_type, na[m], 1ul>;
                     auto b = std::array<value_type,ublas::product_v<nb_type>>();
                     std::fill(std::begin(b), std::end(b), value_type{1});
