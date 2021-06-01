@@ -121,11 +121,11 @@ namespace boost::numeric::ublas{
   // because the complex number does not support increment operator(++)
   template<typename ValueType>
   constexpr auto iota(auto& c, ValueType v) noexcept{
-      std::generate(c.begin(), c.end(), [v = v]() mutable{
-          auto prev = v;
-          v += ValueType(1);
-          return prev;
-      });
+     auto inc = ValueType{1};
+      for(auto& el : c){
+        el = v;
+        v += inc;
+      }
   }
 } // namespace boost::numeric::ublas
 

@@ -37,7 +37,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_dynamic,
         auto three = value_type{3};
         auto four = value_type{4};
         
-        if (t1.rank() == 0ul) return;
+        if (t1.rank() <= 1ul) return;
 
         BOOST_TEST_CONTEXT("[Binary Operator] rank("<< t1.rank() <<") dynamic tensor"){
             auto t2 = t1;
@@ -99,11 +99,11 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_static_rank,
     using fixture_t = ublas::tuple_fixture_tensor_static_rank<TestTupleType>;
 
     constexpr auto check = [](auto /*id*/, auto t1){
-        auto v = value_type{};
-        auto one = value_type{1};
-        auto three = value_type{3};
-        auto four = value_type{4};
-        if constexpr(t1.rank() > 0ul){
+        if constexpr(t1.rank() > 1ul){
+            auto v = value_type{};
+            auto one = value_type{1};
+            auto three = value_type{3};
+            auto four = value_type{4};
 
             BOOST_TEST_CONTEXT("[Binary Operator] static rank("<< t1.rank() <<") tensor"){
                 auto t2 = t1;
