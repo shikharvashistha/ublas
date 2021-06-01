@@ -36,6 +36,9 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_dynamic,
         auto one = value_type{1};
         auto three = value_type{3};
         auto four = value_type{4};
+        
+        if (t1.rank() == 0ul) return;
+
         BOOST_TEST_CONTEXT("[Binary Operator] rank("<< t1.rank() <<") dynamic tensor"){
             auto t2 = t1;
             auto r = t1;
@@ -46,34 +49,34 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_dynamic,
             r = t1 + t1 + t1 + t2;
 
             for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), three*t1(i) + t2(i) );
+                BOOST_CHECK_EQUAL ( r(i), three*t1(i) + t2(i) );
 
 
             r = t2 / (t1+three) * (t1+one) - t2; // r = ( t2/ ((t+3)*(t+1)) ) - t2
 
             for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), t2(i) / (t1(i)+three)*(t1(i)+one) - t2(i) );
+                BOOST_CHECK_EQUAL ( r(i), t2(i) / (t1(i)+three)*(t1(i)+one) - t2(i) );
 
             r = three+t2 / (t1+three) * (t1+one) * t1 - t2; // r = 3+( t2/ ((t+3)*(t+1)*t) ) - t2
 
             for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), three+t2(i) / (t1(i)+three)*(t1(i)+one)*t1(i) - t2(i) );
+                BOOST_CHECK_EQUAL ( r(i), three+t2(i) / (t1(i)+three)*(t1(i)+one)*t1(i) - t2(i) );
 
             r = t2 - t1 + t2 - t1;
 
             for(auto i = 0ul; i < r.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), four );
+                BOOST_CHECK_EQUAL ( r(i), four );
 
 
             r = t1 * t1 * t1 * t2;
 
             for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), t1(i)*t1(i)*t1(i)*t2(i) );
+                BOOST_CHECK_EQUAL ( r(i), t1(i)*t1(i)*t1(i)*t2(i) );
 
             r = (t2/t2) * (t2/t2);
 
             for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), one );
+                BOOST_CHECK_EQUAL ( r(i), one );
         }
     };
 
@@ -100,44 +103,47 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_static_rank,
         auto one = value_type{1};
         auto three = value_type{3};
         auto four = value_type{4};
-        BOOST_TEST_CONTEXT("[Binary Operator] static rank("<< t1.rank() <<") tensor"){
-            auto t2 = t1;
-            auto r = t1;
+        if constexpr(t1.rank() > 0ul){
 
-            ublas::iota(t1, v);
-            ublas::iota(t2, v + value_type{2});
+            BOOST_TEST_CONTEXT("[Binary Operator] static rank("<< t1.rank() <<") tensor"){
+                auto t2 = t1;
+                auto r = t1;
 
-            r = t1 + t1 + t1 + t2;
+                ublas::iota(t1, v);
+                ublas::iota(t2, v + value_type{2});
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), three*t1(i) + t2(i) );
+                r = t1 + t1 + t1 + t2;
 
-
-            r = t2 / (t1+three) * (t1+one) - t2; // r = ( t2/ ((t+3)*(t+1)) ) - t2
-
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), t2(i) / (t1(i)+three)*(t1(i)+one) - t2(i) );
-
-            r = three+t2 / (t1+three) * (t1+one) * t1 - t2; // r = 3+( t2/ ((t+3)*(t+1)*t) ) - t2
-
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), three+t2(i) / (t1(i)+three)*(t1(i)+one)*t1(i) - t2(i) );
-
-            r = t2 - t1 + t2 - t1;
-
-            for(auto i = 0ul; i < r.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), four );
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), three*t1(i) + t2(i) );
 
 
-            r = t1 * t1 * t1 * t2;
+                r = t2 / (t1+three) * (t1+one) - t2; // r = ( t2/ ((t+3)*(t+1)) ) - t2
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), t1(i)*t1(i)*t1(i)*t2(i) );
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), t2(i) / (t1(i)+three)*(t1(i)+one) - t2(i) );
 
-            r = (t2/t2) * (t2/t2);
+                r = three+t2 / (t1+three) * (t1+one) * t1 - t2; // r = 3+( t2/ ((t+3)*(t+1)*t) ) - t2
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), one );
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), three+t2(i) / (t1(i)+three)*(t1(i)+one)*t1(i) - t2(i) );
+
+                r = t2 - t1 + t2 - t1;
+
+                for(auto i = 0ul; i < r.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), four );
+
+
+                r = t1 * t1 * t1 * t2;
+
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), t1(i)*t1(i)*t1(i)*t2(i) );
+
+                r = (t2/t2) * (t2/t2);
+
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), one );
+            }
         }
     };
 
@@ -164,44 +170,47 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_static,
         auto one = value_type{1};
         auto three = value_type{3};
         auto four = value_type{4};
-        BOOST_TEST_CONTEXT("[Binary Operator] rank("<< t1.rank() <<") static tensor"){
-            auto t2 = t1;
-            auto r = t1;
+        if constexpr(t1.rank() > 0ul){
 
-            ublas::iota(t1, v);
-            ublas::iota(t2, v + value_type{2});
+            BOOST_TEST_CONTEXT("[Binary Operator] rank("<< t1.rank() <<") static tensor"){
+                auto t2 = t1;
+                auto r = t1;
 
-            r = t1 + t1 + t1 + t2;
+                ublas::iota(t1, v);
+                ublas::iota(t2, v + value_type{2});
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), three*t1(i) + t2(i) );
+                r = t1 + t1 + t1 + t2;
 
-
-            r = t2 / (t1+three) * (t1+one) - t2; // r = ( t2/ ((t+3)*(t+1)) ) - t2
-
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), t2(i) / (t1(i)+three)*(t1(i)+one) - t2(i) );
-
-            r = three+t2 / (t1+three) * (t1+one) * t1 - t2; // r = 3+( t2/ ((t+3)*(t+1)*t) ) - t2
-
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), three+t2(i) / (t1(i)+three)*(t1(i)+one)*t1(i) - t2(i) );
-
-            r = t2 - t1 + t2 - t1;
-
-            for(auto i = 0ul; i < r.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), four );
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), three*t1(i) + t2(i) );
 
 
-            r = t1 * t1 * t1 * t2;
+                r = t2 / (t1+three) * (t1+one) - t2; // r = ( t2/ ((t+3)*(t+1)) ) - t2
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), t1(i)*t1(i)*t1(i)*t2(i) );
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), t2(i) / (t1(i)+three)*(t1(i)+one) - t2(i) );
 
-            r = (t2/t2) * (t2/t2);
+                r = three+t2 / (t1+three) * (t1+one) * t1 - t2; // r = 3+( t2/ ((t+3)*(t+1)*t) ) - t2
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), one );
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), three+t2(i) / (t1(i)+three)*(t1(i)+one)*t1(i) - t2(i) );
+
+                r = t2 - t1 + t2 - t1;
+
+                for(auto i = 0ul; i < r.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), four );
+
+
+                r = t1 * t1 * t1 * t2;
+
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), t1(i)*t1(i)*t1(i)*t2(i) );
+
+                r = (t2/t2) * (t2/t2);
+
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), one );
+            }
         }
     };
 

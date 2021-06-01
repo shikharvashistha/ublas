@@ -37,7 +37,9 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_dynamic,
         auto two = value_type{2};
         auto three = value_type{3};
         auto four = value_type{4};
-        BOOST_TEST_CONTEXT("[Unary Operator] rank("<< t1.rank() <<") dynamic tensor"){
+        if(t1.rank() == 0ul) return;
+
+        BOOST_TEST_CONTEXT("[Arithmatic Assignment] rank("<< t1.rank() <<") dynamic tensor"){
             auto t2 = t1;
             auto r = t1;
 
@@ -49,31 +51,31 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_dynamic,
             r += two;
 
             for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), two*t1(i) + four );
+                BOOST_CHECK_EQUAL ( r(i), two*t1(i) + four );
 
             r  = two + t1;
             r += t1;
             r += two;
 
             for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), two*t1(i) + four );
+                BOOST_CHECK_EQUAL ( r(i), two*t1(i) + four );
 
             for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), two*t1(i) + four );
+                BOOST_CHECK_EQUAL ( r(i), two*t1(i) + four );
 
             r = (t1-two);
             r += t1;
             r -= two;
 
             for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), two*t1(i) - four );
+                BOOST_CHECK_EQUAL ( r(i), two*t1(i) - four );
 
             r  = (t1*two);
             r *= three;
             r *= t1;
 
             for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), two*three*t1(i)*t1(i) );
+                BOOST_CHECK_EQUAL ( r(i), two*three*t1(i)*t1(i) );
 
             r  = (t2*two);
             r /= two;
@@ -81,7 +83,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_dynamic,
             r *= t2;
 
             for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), (t2(i)*two) / (two*t2(i)) * t2(i) );
+                BOOST_CHECK_EQUAL ( r(i), (t2(i)*two) / (two*t2(i)) * t2(i) );
 
             r  = (t2/two+one);
             r /= (two/t2+one);
@@ -124,66 +126,69 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_static_rank,
         auto two = value_type{2};
         auto three = value_type{3};
         auto four = value_type{4};
-        BOOST_TEST_CONTEXT("[Unary Operator] static rank("<< t1.rank() <<") tensor"){
-            auto t2 = t1;
-            auto r = t1;
+        if constexpr(t1.rank() > 0ul){
 
-            ublas::iota(t1, v);
-            ublas::iota(t2, v + two);
+            BOOST_TEST_CONTEXT("[Arithmatic Assignment] static rank("<< t1.rank() <<") tensor"){
+                auto t2 = t1;
+                auto r = t1;
 
-            r  = t1 + two;
-            r += t1;
-            r += two;
+                ublas::iota(t1, v);
+                ublas::iota(t2, v + two);
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), two*t1(i) + four );
+                r  = t1 + two;
+                r += t1;
+                r += two;
 
-            r  = two + t1;
-            r += t1;
-            r += two;
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), two*t1(i) + four );
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), two*t1(i) + four );
+                r  = two + t1;
+                r += t1;
+                r += two;
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), two*t1(i) + four );
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), two*t1(i) + four );
 
-            r = (t1-two);
-            r += t1;
-            r -= two;
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), two*t1(i) + four );
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), two*t1(i) - four );
+                r = (t1-two);
+                r += t1;
+                r -= two;
 
-            r  = (t1*two);
-            r *= three;
-            r *= t1;
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), two*t1(i) - four );
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), two*three*t1(i)*t1(i) );
+                r  = (t1*two);
+                r *= three;
+                r *= t1;
 
-            r  = (t2*two);
-            r /= two;
-            r /= t2;
-            r *= t2;
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), two*three*t1(i)*t1(i) );
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), (t2(i)*two) / (two*t2(i)) * t2(i) );
+                r  = (t2*two);
+                r /= two;
+                r /= t2;
+                r *= t2;
 
-            r  = (t2/two+one);
-            r /= (two/t2+one);
-            r /= t2;
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), (t2(i)*two) / (two*t2(i)) * t2(i) );
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-                BOOST_CHECK_EQUAL ( r(i), (t2(i)/two+one) / (two/t2(i)+one) / t2(i) );
+                r  = (t2/two+one);
+                r /= (two/t2+one);
+                r /= t2;
 
-            tensor_t q = -r;
-            for(auto i = 0ul; i < t1.size(); ++i)
-                BOOST_CHECK_EQUAL ( q(i), -r(i) );
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), (t2(i)/two+one) / (two/t2(i)+one) / t2(i) );
 
-            tensor_t p = +r;
-            for(auto i = 0ul; i < t1.size(); ++i)
-                BOOST_CHECK_EQUAL ( p(i), r(i) );
+                tensor_t q = -r;
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( q(i), -r(i) );
+
+                tensor_t p = +r;
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( p(i), r(i) );
+            }
         }
     };
 
@@ -211,66 +216,69 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_static,
         auto two = value_type{2};
         auto three = value_type{3};
         auto four = value_type{4};
-        BOOST_TEST_CONTEXT("[Unary Operator] rank("<< t1.rank() <<") static tensor"){
-            auto t2 = t1;
-            auto r = t1;
+        if constexpr (t1.rank() > 0ul){
 
-            ublas::iota(t1, v);
-            ublas::iota(t2, v + two);
+            BOOST_TEST_CONTEXT("[Arithmatic Assignment] rank("<< t1.rank() <<") static tensor"){
+                auto t2 = t1;
+                auto r = t1;
 
-            r  = t1 + two;
-            r += t1;
-            r += two;
+                ublas::iota(t1, v);
+                ublas::iota(t2, v + two);
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), two*t1(i) + four );
+                r  = t1 + two;
+                r += t1;
+                r += two;
 
-            r  = two + t1;
-            r += t1;
-            r += two;
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), two*t1(i) + four );
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), two*t1(i) + four );
+                r  = two + t1;
+                r += t1;
+                r += two;
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), two*t1(i) + four );
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), two*t1(i) + four );
 
-            r = (t1-two);
-            r += t1;
-            r -= two;
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), two*t1(i) + four );
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), two*t1(i) - four );
+                r = (t1-two);
+                r += t1;
+                r -= two;
 
-            r  = (t1*two);
-            r *= three;
-            r *= t1;
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), two*t1(i) - four );
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), two*three*t1(i)*t1(i) );
+                r  = (t1*two);
+                r *= three;
+                r *= t1;
 
-            r  = (t2*two);
-            r /= two;
-            r /= t2;
-            r *= t2;
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), two*three*t1(i)*t1(i) );
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-            BOOST_CHECK_EQUAL ( r(i), (t2(i)*two) / (two*t2(i)) * t2(i) );
+                r  = (t2*two);
+                r /= two;
+                r /= t2;
+                r *= t2;
 
-            r  = (t2/two+one);
-            r /= (two/t2+one);
-            r /= t2;
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), (t2(i)*two) / (two*t2(i)) * t2(i) );
 
-            for(auto i = 0ul; i < t1.size(); ++i)
-                BOOST_CHECK_EQUAL ( r(i), (t2(i)/two+one) / (two/t2(i)+one) / t2(i) );
+                r  = (t2/two+one);
+                r /= (two/t2+one);
+                r /= t2;
 
-            tensor_t q = -r;
-            for(auto i = 0ul; i < t1.size(); ++i)
-                BOOST_CHECK_EQUAL ( q(i), -r(i) );
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( r(i), (t2(i)/two+one) / (two/t2(i)+one) / t2(i) );
 
-            tensor_t p = +r;
-            for(auto i = 0ul; i < t1.size(); ++i)
-                BOOST_CHECK_EQUAL ( p(i), r(i) );
+                tensor_t q = -r;
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( q(i), -r(i) );
+
+                tensor_t p = +r;
+                for(auto i = 0ul; i < t1.size(); ++i)
+                    BOOST_CHECK_EQUAL ( p(i), r(i) );
+            }
         }
     };
 
