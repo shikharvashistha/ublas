@@ -138,21 +138,21 @@ constexpr auto generate_result_extents() noexcept{
     using value_type = typename E::value_type;
     constexpr auto sz = std::max( std::size_t{N - 1ul}, std::size_t{2} );
 
-    static constexpr auto helper1 = []{
-        std::array<value_type,sz> temp;
-        constexpr auto n = ublas::to_array_v<E>;
-        std::fill(std::begin(temp), std::end(temp), value_type{1});
-        for(std::size_t i = 0ul, j = 0ul; i < N; ++i){
-            if(i != M) temp[j++] = n[i];
-        }
-        return temp;
-    };
 
-    constexpr auto helper2 = []<std::size_t... Is>(std::index_sequence<Is...>){
-        constexpr auto arr = helper1();
+    constexpr auto helper = []<std::size_t... Is>(std::index_sequence<Is...>){
+        constexpr auto process_arr = []{
+            std::array<value_type,sz> temp;
+            constexpr auto n = ublas::to_array_v<E>;
+            std::fill(std::begin(temp), std::end(temp), value_type{1});
+            for(std::size_t i = 0ul, j = 0ul; i < N; ++i){
+                if(i != M) temp[j++] = n[i];
+            }
+            return temp;
+        };
+        constexpr auto arr = process_arr();
         return ublas::extents_core<value_type, arr[Is]...>{};
     };
-    return helper2(std::make_index_sequence<sz>{});
+    return helper(std::make_index_sequence<sz>{});
 }
 
 // FIXME: temp fix to the invalid computation of static strides,
