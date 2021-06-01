@@ -111,11 +111,18 @@ using inner_type_t = typename inner_type<T>::type;
 #include <boost/multiprecision/cpp_bin_float.hpp>
 namespace boost::numeric::ublas{
   using double_extended = boost::multiprecision::cpp_bin_float_double_extended;
-  using test_types = zip<int,float,std::complex<float>,double_extended>::with_t<layout::first_order, layout::last_order>;
-  using cpp_std_types = zip<int,float,std::complex<float>>::with_t<layout::first_order, layout::last_order>;
-  using cpp_basic_std_types = zip<int,float,double>::with_t<layout::first_order, layout::last_order>;
-  using test_types_with_no_layout = std::tuple<std::int32_t,std::int64_t,float,double,std::complex<float>>;
+  
+  // using cpp_std_types = zip<int,float,std::complex<float>>::with_t<layout::first_order, layout::last_order>;
+  using cpp_std_types = zip<int,float>::with_t<layout::first_order, layout::last_order>;
+
+  using cpp_basic_std_types = zip<int,float>::with_t<layout::first_order, layout::last_order>;
   using layout_test_types = std::tuple<layout::first_order, layout::last_order>;
+  
+  // using test_types_with_no_layout = std::tuple<std::int32_t,std::int64_t,float,double,std::complex<float>>;
+  using test_types_with_no_layout = std::tuple<int,float>;
+
+  // using test_types = zip<int,float,std::complex<float>,double_extended>::with_t<layout::first_order, layout::last_order>;
+  using test_types = zip<int,float>::with_t<layout::first_order, layout::last_order>;
 
   // NOTE: std::iota cannot fill the container with the complex number
   // because the complex number does not support increment operator(++)
