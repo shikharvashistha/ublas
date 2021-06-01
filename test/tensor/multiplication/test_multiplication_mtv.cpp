@@ -141,7 +141,7 @@ constexpr auto generate_result_extents() noexcept{
     namespace ublas = boost::numeric::ublas;
     using value_type = typename E::value_type;
     constexpr auto sz = std::max( std::size_t{N - 1ul}, std::size_t{2} );
-    constexpr auto helper1 = []{
+    static constexpr auto helper1 = []{
         std::array<value_type,sz> temp;
         constexpr auto n = ublas::to_array_v<E>;
         std::fill(std::begin(temp), std::end(temp), value_type{1});
@@ -152,7 +152,7 @@ constexpr auto generate_result_extents() noexcept{
         return temp;
     };
 
-    constexpr auto helper2 = [helper1]<std::size_t... Is>(std::index_sequence<Is...>){
+    constexpr auto helper2 = []<std::size_t... Is>(std::index_sequence<Is...>){
         constexpr auto arr = helper1();
         return ublas::extents_core<value_type, arr[Is]...>{};
     };

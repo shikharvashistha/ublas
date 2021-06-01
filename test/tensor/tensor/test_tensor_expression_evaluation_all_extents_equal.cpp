@@ -144,6 +144,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_static_rank,
     namespace ublas = boost::numeric::ublas;
     using value_type = typename TestTupleType::first_type;
     using fixture_t = ublas::tuple_fixture_tensor_static_rank<TestTupleType>;
+    static constexpr auto fixture_size = fixture_t::size;
 
 
     constexpr auto uplus1 = [](auto const& a){return a + value_type(1); };
@@ -186,7 +187,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_static_rank,
         
         constexpr std::size_t i = IType::value;
 
-        if constexpr(i < fixture_t::size - 1ul){
+        if constexpr(i < fixture_size - 1ul){
 
             auto v = value_type{};
             auto t2 = std::get<i + 1ul>( this->collection );

@@ -196,7 +196,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(test_tensor_static_rank,
     ublas::for_each_fixture(self, check);
 }
 
-// FIXME: Enable after the strides computation is fixed
+// FIXME: Enable after the strides computation is fixed [ issue #119 ]
 // BOOST_TEST_DECORATOR(
 //     *boost::unit_test::label("op_assignement")
 //     *boost::unit_test::description("Testing the static tensor's assingment of arithmetic result")
