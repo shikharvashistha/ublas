@@ -1,4 +1,4 @@
-name: 'HTML Preview Action'
+name: test
 on: [pull_request]
 
 jobs:
