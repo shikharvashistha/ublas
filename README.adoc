@@ -14,65 +14,65 @@ Distributed under the Boost Software License, Version 1.0.
 
 :leveloffset: +1
 
-include::ublas/overview.adoc[]
+include::doc/ublas/overview.adoc[]
 
-include::ublas/index.adoc[]
+include::doc/ublas/index.adoc[]
 
-include::ublas/vector.adoc[]
+include::doc/ublas/vector.adoc[]
 
-include::ublas/vector_sparse.adoc[]
+include::doc/ublas/vector_sparse.adoc[]
 
-include::ublas/vector_proxy.adoc[]
+include::doc/ublas/vector_proxy.adoc[]
 
-include::ublas/vector_expression.adoc[]
+include::doc/ublas/vector_expression.adoc[]
 
-include::ublas/matrix.adoc[]
+include::doc/ublas/matrix.adoc[]
 
-include::ublas/triangular.adoc[]
+include::doc/ublas/triangular.adoc[]
 
-include::ublas/symmetric.adoc[]
+include::doc/ublas/symmetric.adoc[]
 
-include::ublas/hermitian.adoc[]
+include::doc/ublas/hermitian.adoc[]
 
-include::ublas/banded.adoc[]
+include::doc/ublas/banded.adoc[]
 
-include::ublas/matrix_sparse.adoc[]
+include::doc/ublas/matrix_sparse.adoc[]
 
-include::ublas/matrix_proxy.adoc[]
+include::doc/ublas/matrix_proxy.adoc[]
 
-include::ublas/matrix_expression.adoc[]
+include::doc/ublas/matrix_expression.adoc[]
 
-include::ublas/tensor.adoc[]
+include::doc/ublas/tensor.adoc[]
 
-include::ublas/tensor/tensor_expression.adoc[]
+include::doc/ublas/tensor/tensor_expression.adoc[]
 
-include::ublas/unbounded_array.adoc[]
+include::doc/ublas/unbounded_array.adoc[]
 
-include::ublas/bounded_array.adoc[]
+include::doc/ublas/bounded_array.adoc[]
 
-include::ublas/range.adoc[]
+include::doc/ublas/range.adoc[]
 
-include::ublas/tensor/extents.adoc[]
+include::doc/ublas/tensor/extents.adoc[]
 
-include::ublas/tensor/strides.adoc[]
+include::doc/ublas/tensor/strides.adoc[]
 
-include::ublas/tensor/tensor_expression.adoc[]
+include::doc/ublas/tensor/tensor_expression.adoc[]
 
-include::ublas/tensor/tensor_index.adoc[]
+include::doc/ublas/tensor/tensor_index.adoc[]
 
-include::ublas/storage_sparse.adoc[]
+include::doc/ublas/storage_sparse.adoc[]
 
-include::ublas/products.adoc[]
+include::doc/ublas/products.adoc[]
 
-include::ublas/blas.adoc[]
+include::doc/ublas/blas.adoc[]
 
-include::ublas/container_concept.adoc[]
+include::doc/ublas/container_concept.adoc[]
 
-include::ublas/expression_concept.adoc[]
+include::doc/ublas/expression_concept.adoc[]
 
-include::ublas/storage_concept.adoc[]
+include::doc/ublas/storage_concept.adoc[]
 
-include::ublas/iterator_concept.adoc[]
+include::doc/ublas/iterator_concept.adoc[]
 
 :leveloffset: -1
 
