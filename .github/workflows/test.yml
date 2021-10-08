@@ -1,15 +1,1 @@
-name: test
-on: [pull_request]
-jobs:
-  html_preview:
-    runs-on: ubuntu-latest
-    name: HTML Preview
-    steps:
-      - uses: actions/checkout@v2
-      - name: Get HTML preview link
-        id: html_preview
-        uses: pavi2410/html-preview-action@v2
-      - uses: mb2dev/github-action-comment-pull-request@1.0.0
-        with:
-          message: ${{ format('[Click here to preview HTML page in browser]({0})', steps.html_preview.outputs.url) }}
-          GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}          
+#  
