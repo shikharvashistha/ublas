@@ -1,11 +1,12 @@
-name: test2
+name: test
 on: [pull_request]
 jobs:
   html_preview:
     runs-on: ubuntu-latest
     name: HTML Preview
     steps:
+    - name: Convert AsciiDoc step
       id: documents
       uses: Analog-inc/asciidoctor-action@master
       with:
-      shellcommand: "asciidoctor README.adoc"
+        shellcommand: "asciidoctor index.adoc"
