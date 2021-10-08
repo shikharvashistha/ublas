@@ -3,10 +3,13 @@ on: [pull_request]
 jobs:
   asciidoc:
     runs-on: ubuntu-latest
-    name: HTML Preview
+    name: asciidoc
     steps:
-    - name: Convert AsciiDoc step
-      id: documents
-      uses: Analog-inc/asciidoctor-action@master
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
       with:
-        shellcommand: "asciidoctor README.adoc"
+          ruby-version: 2.7
+    - uses: reitzig/actions-asciidoctor@v2.0.0
+      with:
+          version: 2.0.10
+    - run: asciidoctor --version
