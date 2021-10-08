@@ -13,5 +13,5 @@ jobs:
           html_file: 'https://github.com/shikharvashistha/ublas/blob/gh-pages/README.html'
       - uses: mb2dev/github-action-comment-pull-request@1.0.0
         with:
-          message: ${{ format('[Click here to preview HTML page in browser]({0})', steps.html_preview.outputs) }}
+          message: ${{ format('[Click here to preview HTML page in browser]({0})', steps.html_preview.outputs.url) }}
           GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}        
