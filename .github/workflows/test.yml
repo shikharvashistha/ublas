@@ -7,9 +7,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Get HTML preview link
-        id: html_preview
-        uses: shikharvashistha/html-preview-action@v3
       - uses: mb2dev/github-action-comment-pull-request@1.0.0
         with:
-          message: ${{ format('[Click here to preview HTML page in browser]({0})', steps.html_preview.outputs.url) }}
+          message: ${{ format('[Click here to preview HTML page in browser]({0})', https://htmlpreview.github.io/?https://github.com/shikharvashistha/ublas/blob/gh-pages/README.html) }}
           GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}        
