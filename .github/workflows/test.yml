@@ -13,5 +13,6 @@ jobs:
         uses: pavi2410/html-preview-action@v2
       - uses: jungwinter/comment@v1
         with:
+          type: create
           token: ${{ secrets.SECRET_TOKEN }}
           message: ${{ format('[Click here to preview HTML page in browser]({0})', steps.html_preview.outputs.url) }}
