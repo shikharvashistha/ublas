@@ -13,5 +13,5 @@ jobs:
         uses: pavi2410/html-preview-action@v2
       - uses: mb2dev/github-action-comment-pull-request@1.0.0
         with:
-          message: message ${{ format('[Click here to preview HTML page in browser]({0})', steps.html_preview.outputs.url) }}
+          message: ${{ format('[Click here to preview HTML page in browser]({0})', steps.html_preview.outputs.url) }}
           GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}          
