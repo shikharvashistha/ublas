@@ -1,6 +1,7 @@
 name: test
-on: [pull_request]
-
+on:
+  push:
+    branches: [ docs ]
 jobs:
   html_preview:
     runs-on: ubuntu-latest
@@ -10,7 +11,7 @@ jobs:
       - name: Get HTML preview link
         id: html_preview
         uses: pavi2410/html-preview-action@v2
-      - uses: github-actions-up-and-running/pr-comment@v1.0.0
+      - uses: jungwinter/comment@v1
         with:
-          repo-token: ${{ secrets.SECRET_TOKEN }}
+          token: ${{ secrets.SECRET_TOKEN }}
           message: ${{ format('[Click here to preview HTML page in browser]({0})', steps.html_preview.outputs.url) }}
