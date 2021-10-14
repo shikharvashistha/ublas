@@ -3,21 +3,21 @@ on:
   push:
     branches: [ docs ]
 jobs:
-  build:
+  asciidoc:
     runs-on: ubuntu-latest
+    name: asciidoc
     steps:
-    - name: docs-compilation
     - uses: actions/checkout@v2
     - uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.0.2
+          ruby-version: 2.7
     - uses: reitzig/actions-asciidoctor@v2.0.0
       with:
           version: 2.0.10
     - run: asciidoctor doc/ublas.adoc
+    
     - name: asciidoctor-ghpages
-    - uses: actions/checkout@v2
-    - uses: manoelcampos/asciidoctor-ghpages-action@v2
+      uses: manoelcampos/asciidoctor-ghpages-action@v2
       with:
         asciidoctor_params: --attribute=nofooter
-    
+        pdf_build: true 
