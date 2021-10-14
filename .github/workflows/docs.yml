@@ -6,18 +6,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: asciidoctor-ghpages
-      uses: manoelcampos/asciidoctor-ghpages-action@v2
-      with:
-        asciidoctor_params: --attribute=nofooter
-        pdf_build: true
     - name: docs-compilation
     - uses: actions/checkout@v2
     - uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.6
+        ruby-version: 3.0.2
     - uses: reitzig/actions-asciidoctor@v2.0.0
       with:
           version: 2.0.10
     - run: asciidoctor doc/ublas.adoc
+    - name: asciidoctor-ghpages
+    - uses: actions/checkout@v2
+    - uses: manoelcampos/asciidoctor-ghpages-action@v2
+      with:
+        asciidoctor_params: --attribute=nofooter
+    
